@@ -1,0 +1,16 @@
+{
+    "private": {
+        "botKey": "",
+        "ownerID": ""
+    },
+    "bot": {
+        "prefix": "!",
+        "blacklistedUsers": [""]
+    },
+    "features": {
+        "score": true,
+        "reactRoles": true,
+        "devUtils": true,
+        "music": true
+    }
+}
