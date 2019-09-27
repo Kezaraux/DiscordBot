@@ -5,11 +5,13 @@ import log from "../utils/logger";
 
 const command = "state";
 const aliases = [command, "s"];
+const category = "devUtils";
 
 class StateCommand extends Command {
   constructor() {
     super(command, {
-      aliases
+      aliases,
+      category
     });
     log("StateCommand created");
   }
@@ -21,7 +23,7 @@ class StateCommand extends Command {
 }
 
 export const help = {
-  isHidden: true,
+  isHidden: config.get(`features.${category}`) || true,
   identifier: command,
   usage: `${config.get("bot.prefix")}${command}`,
   aliases,

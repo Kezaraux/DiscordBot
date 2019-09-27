@@ -5,11 +5,13 @@ import log from "../utils/logger";
 
 const command = "setupReaction";
 const aliases = [command, "setupReact", "setR", "sr", "doReact"];
+const category = "reactRoles";
 
 class SetupReactionCommand extends Command {
   constructor() {
     super(command, {
       aliases,
+      category,
       args: [
         { id: "channel", type: "string" },
         { id: "messageId", type: "string" }
@@ -46,7 +48,7 @@ class SetupReactionCommand extends Command {
 }
 
 export const help = {
-  isHidden: false,
+  isHidden: config.get(`features.${category}`) || false,
   identifier: command,
   usage: `${config.get("bot.prefix")}${command}`,
   aliases,

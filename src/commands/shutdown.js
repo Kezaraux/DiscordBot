@@ -5,11 +5,13 @@ import log from "../utils/logger";
 
 const command = "shutdown";
 const aliases = [command, "sd"];
+const category = "admin";
 
 class ShutdownCommand extends Command {
   constructor() {
     super(command, {
       aliases,
+      category,
       ownerOnly: true
     });
     log(`${command}Command created`);
@@ -24,7 +26,7 @@ class ShutdownCommand extends Command {
 }
 
 export const help = {
-  isHidden: true,
+  isHidden: config.get(`features.${category}`) || true,
   identifier: command,
   usage: `${config.get("bot.prefix")}${command}`,
   aliases,

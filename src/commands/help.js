@@ -9,11 +9,13 @@ import log from "../utils/logger";
 
 const command = "help";
 const aliases = [command];
+const category = "default";
 
 class HelpCommand extends Command {
   constructor() {
     super(command, {
       aliases,
+      category,
       args: [
         {
           id: "cmd",
@@ -86,8 +88,8 @@ const getAllCommands = async () => {
   return cmdList;
 };
 
-module.exports.help = {
-  isHidden: false,
+export const help = {
+  isHidden: config.get(`features.${category}`) || false,
   identifier: command,
   aliases,
   usage: `${config.get("bot.prefix")}help [command]`,

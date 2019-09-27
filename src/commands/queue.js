@@ -10,6 +10,7 @@ import { getSongQueue } from "../selectors";
 
 const command = "queue";
 const aliases = [command, "q"];
+const category = "music";
 
 class QueueCommand extends Command {
   constructor() {
@@ -95,7 +96,7 @@ const constructQueueMessage = store => {
 };
 
 export const help = {
-  isHidden: false,
+  isHidden: config.get(`features.${category}`) || false,
   identifier: command,
   usage: `${config.get("bot.prefix")}${command} <list/add/remove/clear> [song]`,
   aliases,

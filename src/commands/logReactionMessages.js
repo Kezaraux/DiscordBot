@@ -5,11 +5,13 @@ import log from "../utils/logger";
 
 const command = "logMsgTable";
 const aliases = [command, "lmt"];
+const category = "devUtils";
 
 class LogReactMessageTableCommand extends Command {
   constructor() {
     super(command, {
-      aliases
+      aliases,
+      category
     });
     log(`${command}Command created`);
   }
@@ -22,7 +24,7 @@ class LogReactMessageTableCommand extends Command {
 }
 
 export const help = {
-  isHidden: false,
+  isHidden: config.get(`features.${category}`) || true,
   identifier: command,
   usage: `${config.get("bot.prefix")}${command}`,
   aliases,

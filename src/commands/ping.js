@@ -5,11 +5,13 @@ import log from "../utils/logger";
 
 const command = "ping";
 const aliases = [command, "p"];
+const category = "default";
 
 class PingCommand extends Command {
   constructor() {
     super(command, {
-      aliases
+      aliases,
+      category
     });
     log(`${command}Command created`);
   }
@@ -20,7 +22,7 @@ class PingCommand extends Command {
 }
 
 export const help = {
-  isHidden: false,
+  isHidden: config.get(`features.${category}`) || false,
   identifier: command,
   usage: `${config.get("bot.prefix")}${command}`,
   aliases,

@@ -5,11 +5,13 @@ import log from "../utils/logger";
 
 const command = "message";
 const aliases = [command, "msg", "m"];
+const category = "reactRoles";
 
 class MessageCommand extends Command {
   constructor() {
     super(command, {
       aliases,
+      category,
       split: "quoted",
       args: [
         { id: "channel", type: "string" },
@@ -30,7 +32,7 @@ class MessageCommand extends Command {
 }
 
 export const help = {
-  isHidden: false,
+  isHidden: config.get(`features.${category}`) || false,
   identifier: command,
   usage: `${config.get("bot.prefix")}${command}`,
   aliases,
