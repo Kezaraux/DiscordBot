@@ -83,6 +83,39 @@ class ReadyListener extends Listener {
         "DELETE FROM reaction_messages WHERE id = :id;"
       );
       log("Reaction messages table usage statements ready");
+
+      const roleTable = sql
+        .prepare(
+          "SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'reaction_roles'"
+        )
+        .get();
+        log("Checking reaction role table");
+      if (!roleTable["count(*)"]) {
+        log("No role table present, initializing");
+        sql
+          .prepare("CREATE TABLE reaction_roles (id TEXT PRIMARY KEY, react_message_id TEXT, reaction_identifier TEXT, role_id TEXT);")
+          .run();
+        sql
+          .prepare("CREATE UNIQUE INDEX idx_react_role_id on reaction_roles (id);")
+          .run();
+        sql.pragma("synchronous = 1");
+        sql.pragma("journal_mode = wal");
+        log("Reaction role table established");
+      }
+      this.client.addReactionRole = sql.prepare(
+        "INSERT OR REPLACE INTO reaction_roles (id, react_message_id, reaction_identifier, role_id) values (@id, @react_message_id, @reaction_identifier, @role_id);"
+      );
+      this.client.getReactionRole = sql.prepare(
+        "SELECT * FROM reaction_roles WHERE react_message_id = ? AND reaction_identifier = ?"
+      );
+      this.client.removeReactionRole = sql.prepare(
+        "DELETE FROM reaction_roles WHERE id = :id;"
+      );
+      this.client.getAllReactionRoles = sql.prepare(
+        "SELECT * FROM reaction_roles"
+      );
+      log("Reaction role table usage statements ready");
+
     }
 
     log("Database is good to go");

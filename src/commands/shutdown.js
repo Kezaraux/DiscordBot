@@ -26,7 +26,7 @@ class ShutdownCommand extends Command {
 }
 
 export const help = {
-  isHidden: config.get(`features.${category}`) || true,
+  isEnabled: config.get(`features.${category}`) || false,
   identifier: command,
   usage: `${config.get("bot.prefix")}${command}`,
   aliases,

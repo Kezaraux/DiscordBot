@@ -20,14 +20,12 @@ class SetupReactionCommand extends Command {
     log(`${command}Command created`);
   }
 
-  exec(message, args) {
+  async exec(message, args) {
     const channel = message.guild.channels.find(c => c.id === args.channel);
     if (!channel) {
       return message.channel.send("I couldn't find the channel you specified!");
     }
-    const toBeReactMessage = channel.messages.find(
-      m => m.id === args.messageId
-    );
+    const toBeReactMessage = await channel.fetchMessage(args.messageId);
     if (!toBeReactMessage) {
       return message.channel.send("I couldn't find the message you specified!");
     }
@@ -48,9 +46,9 @@ class SetupReactionCommand extends Command {
 }
 
 export const help = {
-  isHidden: config.get(`features.${category}`) || false,
+  isEnabled: config.get(`features.${category}`) || true,
   identifier: command,
-  usage: `${config.get("bot.prefix")}${command}`,
+  usage: `${config.get("bot.prefix")}${command} <channel id> <message id>`,
   aliases,
   blurb:
     "Reacts to a message with the specified emoji." +

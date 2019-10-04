@@ -52,7 +52,7 @@ class HelpCommand extends Command {
     helpEmbed.addField(
       "Commands",
       cmdData
-        .filter(cmd => !cmd.isHidden)
+        .filter(cmd => cmd.isEnabled)
         .map(cmd => cmd.identifier)
         .join(", ")
     );
@@ -76,20 +76,21 @@ const getAllCommands = async () => {
   let cmdList = [];
   cmdFiles.forEach(file => {
     const help = require(`./${file}`).help;
-    cmdList.push({
+    /*cmdList.push({
       isHidden: help.isHidden,
       identifier: help.identifier,
       aliases: help.aliases,
       usage: help.usage,
       blurb: help.blurb
-    });
+    });*/
+    cmdList.push(help);
   });
 
   return cmdList;
 };
 
 export const help = {
-  isHidden: config.get(`features.${category}`) || false,
+  isEnabled: config.get(`features.${category}`) || true,
   identifier: command,
   aliases,
   usage: `${config.get("bot.prefix")}help [command]`,
