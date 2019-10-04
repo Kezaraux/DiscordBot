@@ -1,5 +1,6 @@
 /dist/
 /node_modules/
 /config/default.json
-bot.db
+bot.d*
+
 todo.txt

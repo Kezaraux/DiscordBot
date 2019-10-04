@@ -1,16 +1,19 @@
 {
     "private": {
-        "botKey": "",
-        "ownerID": ""
+        "botKey": "YOUR BOT KEY HERE",
+        "ownerId": "YOUR DISCORD ID HERE"
     },
     "bot": {
         "prefix": "!",
-        "blacklistedUsers": [""]
+        "blacklistedUsers": [""],
+        "newJoinLogChannel": "new-members"
     },
     "features": {
+        "default": true,
         "score": true,
         "reactRoles": true,
         "devUtils": true,
-        "music": true
+        "music": true,
+        "admin": true
     }
 }

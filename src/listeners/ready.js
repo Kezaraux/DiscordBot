@@ -3,6 +3,8 @@ import config from "config";
 
 import log from "../utils/logger";
 
+const wait = require("util").promisify(setTimeout);
+
 class ReadyListener extends Listener {
   constructor() {
     super("ready", {
@@ -84,6 +86,19 @@ class ReadyListener extends Listener {
     }
 
     log("Database is good to go");
+
+    log("Waiting to cache server invites");
+    wait(1000);
+    log("Caching server invites");
+
+    this.client.invites = {};
+    this.client.guilds.forEach(g => {
+      g.fetchInvites().then(invs => {
+        this.client.invites[g.id] = invs;
+      });
+    });
+
+    log("Server invites are cached");
   }
 }
 
