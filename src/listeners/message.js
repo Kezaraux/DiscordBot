@@ -13,10 +13,13 @@ class MessageReactionAddListener extends Listener {
   }
 
   exec(message) {
-    if(config.get("features.score")) {
+    if (config.get("features.score")) {
       if (!message.author.bot) {
         log("\tGot message");
-        let score = this.client.getScore.get(message.author.id, message.guild.id);
+        let score = this.client.getScore.get(
+          message.author.id,
+          message.guild.id
+        );
         if (!score) {
           score = {
             id: `${message.guild.id}-${message.author.id}`,

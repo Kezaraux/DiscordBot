@@ -15,7 +15,7 @@ class ReadyListener extends Listener {
     log("ReadyListener created");
   }
 
-  exec() {
+  async exec() {
     const sql = this.client.db;
 
     log("Bot has started, assessing database status");
@@ -47,7 +47,7 @@ class ReadyListener extends Listener {
       log("Score database usage statements ready");
     }
 
-    if(config.get("features.reactRoles")) {
+    if (config.get("features.reactRoles")) {
       const messageTable = sql
         .prepare(
           "SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'reaction_messages';"
@@ -84,19 +84,36 @@ class ReadyListener extends Listener {
       );
       log("Reaction messages table usage statements ready");
 
+      log("Refreshing any old reaction messages");
+      const reactMessages = this.client.getAllReactMessages.all();
+      for (const rm of reactMessages) {
+        const guild = this.client.guilds.find(g => g.id === rm.guild);
+        if (!guild) {
+          log("Guild for a react message wasn't found. Was I removed from it?");
+        } else {
+          const channel = guild.channels.find(c => c.id === rm.channel);
+          await channel.fetchMessage(rm.message).catch(console.error);
+          log(`Fetched message: ${rm.message}`);
+        }
+      }
+
       const roleTable = sql
         .prepare(
           "SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'reaction_roles'"
         )
         .get();
-        log("Checking reaction role table");
+      log("Checking reaction role table");
       if (!roleTable["count(*)"]) {
         log("No role table present, initializing");
         sql
-          .prepare("CREATE TABLE reaction_roles (id TEXT PRIMARY KEY, react_message_id TEXT, reaction_identifier TEXT, role_id TEXT);")
+          .prepare(
+            "CREATE TABLE reaction_roles (id TEXT PRIMARY KEY, react_message_id TEXT, reaction_identifier TEXT, role_id TEXT);"
+          )
           .run();
         sql
-          .prepare("CREATE UNIQUE INDEX idx_react_role_id on reaction_roles (id);")
+          .prepare(
+            "CREATE UNIQUE INDEX idx_react_role_id on reaction_roles (id);"
+          )
           .run();
         sql.pragma("synchronous = 1");
         sql.pragma("journal_mode = wal");
@@ -115,7 +132,6 @@ class ReadyListener extends Listener {
         "SELECT * FROM reaction_roles"
       );
       log("Reaction role table usage statements ready");
-
     }
 
     log("Database is good to go");
@@ -132,6 +148,7 @@ class ReadyListener extends Listener {
     });
 
     log("Server invites are cached");
+    log("Ready setup completed");
   }
 }
 

@@ -2,14 +2,14 @@ import { Listener } from "discord-akairo";
 
 import log from "../utils/logger";
 
-class MessageReactionAddListener extends Listener {
+class MessageReactionRemoveListener extends Listener {
   constructor() {
-    super("messageReactionAdd", {
+    super("messageReactionRemove", {
       emitter: "client",
-      eventName: "messageReactionAdd"
+      eventName: "messageReactionRemove"
     });
 
-    log("MessageReactionAddListener created");
+    log("MessageReactionRemoveListener created");
   }
 
   exec(msgReact, user) {
@@ -26,9 +26,9 @@ class MessageReactionAddListener extends Listener {
     }
     msgReact.message.guild
       .fetchMember(user)
-      .then(mem => mem.addRole(reactionRole.role_id))
+      .then(mem => mem.removeRole(reactionRole.role_id))
       .catch(console.error);
   }
 }
 
-export default MessageReactionAddListener;
+export default MessageReactionRemoveListener;
