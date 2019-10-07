@@ -21,6 +21,8 @@ class ShutdownCommand extends Command {
     log("Shutdown command recieved");
     return message.channel.send("Going to shut down!").then(() => {
       this.client.destroy();
+      log("Bot has shut down.");
+      process.exit();
     });
   }
 }

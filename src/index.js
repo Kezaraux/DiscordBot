@@ -19,6 +19,7 @@ client.store = configureStore();
 client.db = sql;
 
 client.login(config.get("private.botKey")).then(() => {
-  client.store = configureStore();
+  //client.store = configureStore();
+  client.user.setActivity(`${config.get("bot.prefix")}help for usage!`);
   log("Bot has logged in.");
 });

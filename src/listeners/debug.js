@@ -1,4 +1,5 @@
 import { Listener } from "discord-akairo";
+import config from "config";
 
 import log from "../utils/logger";
 
@@ -15,7 +16,9 @@ class DebugListener extends Listener {
   }
 
   exec(e) {
-    console.info(e);
+    if (config.get("features.debug")) {
+      console.info(e);
+    }
   }
 }
 
