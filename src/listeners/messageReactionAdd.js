@@ -1,6 +1,6 @@
 import { Listener } from "discord-akairo";
 
-import log from "../utils/logger";
+import log, { logObj } from "../utils/logger";
 
 class MessageReactionAddListener extends Listener {
   constructor() {
@@ -21,7 +21,7 @@ class MessageReactionAddListener extends Listener {
       log(
         "Message not found in DB OR emoji isn't established for message in DB"
       );
-      console.log(msgReact.emoji);
+      logObj("Emoji not found is:", msgReact.emoji);
       return;
     }
     msgReact.message.guild

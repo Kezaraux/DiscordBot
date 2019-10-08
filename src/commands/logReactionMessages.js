@@ -1,7 +1,8 @@
 import { Command } from "discord-akairo";
+import { RichEmbed } from "discord.js";
 import config from "config";
 
-import log from "../utils/logger";
+import log, { logObj } from "../utils/logger";
 
 const command = "logMsgTable";
 const aliases = [command, "lmt"];
@@ -18,8 +19,17 @@ class LogReactMessageTableCommand extends Command {
 
   exec(message) {
     const reactionMessages = this.client.getAllReactMessages.all();
-    console.log(reactionMessages);
-    return message.channel.send("Logged all present reaction messages boss!");
+    logObj("Logging reaction messages", reactionMessages);
+    const embed = new RichEmbed()
+      .setTitle("Reaction Messages")
+      .setColor("GREEN");
+    reactionMessages.forEach(rm => {
+      const channelName = message.guild.channels.find(c => c.id === rm.channel)
+        .name;
+      embed.addField(`Channel: ${channelName}`, `Message ID: ${rm.message}`);
+    });
+
+    return message.channel.send(embed);
   }
 }
 

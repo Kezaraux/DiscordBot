@@ -1,7 +1,7 @@
 import { Command } from "discord-akairo";
 import config from "config";
 
-import log from "../utils/logger";
+import log, { logObj } from "../utils/logger";
 
 const command = "state";
 const aliases = [command, "s"];
@@ -17,7 +17,7 @@ class StateCommand extends Command {
   }
 
   exec(message) {
-    console.log(this.client.store.getState());
+    logObj("Current redux state:", this.client.store.getState());
     return message.channel.send("Logged the state!");
   }
 }

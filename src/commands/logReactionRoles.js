@@ -2,7 +2,7 @@ import { Command } from "discord-akairo";
 import { RichEmbed } from "discord.js";
 import config from "config";
 
-import log from "../utils/logger";
+import log, { logObj } from "../utils/logger";
 
 const command = "logRoleTable";
 const aliases = [command, "lrt"];
@@ -18,10 +18,10 @@ class LogReactRolesTableCommand extends Command {
   }
 
   exec(message) {
-    const reactionMessages = this.client.getAllReactionRoles.all();
-    console.log(reactionMessages);
+    const reactionRoles = this.client.getAllReactionRoles.all();
+    logObj("Logging reaction roles", reactionRoles);
     const embed = new RichEmbed().setTitle("Reaction Roles").setColor("GREEN");
-    reactionMessages.forEach(r => {
+    reactionRoles.forEach(r => {
       embed.addField(
         `Message ID: ${r.react_message_id}`,
         r.reaction_identifier
