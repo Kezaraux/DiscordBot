@@ -19,9 +19,9 @@ class MessageReactionRemoveListener extends Listener {
     );
     if (!reactionRole) {
       log(
-        "Message not found in DB OR emoji isn't established for message in DB"
+        "Message not found in DB OR emoji isn't established for message in DB" +
+          "\nBot could have deleted a reaction role and is removing reactions."
       );
-      console.log(msgReact.emoji);
       return;
     }
     msgReact.message.guild

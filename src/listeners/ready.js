@@ -80,7 +80,7 @@ class ReadyListener extends Listener {
         "SELECT * FROM reaction_messages"
       );
       this.client.removeReactMessage = sql.prepare(
-        "DELETE FROM reaction_messages WHERE id = :id;"
+        "DELETE FROM reaction_messages WHERE id = ?;"
       );
       log("\tReaction messages table usage statements ready");
 
@@ -94,6 +94,11 @@ class ReadyListener extends Listener {
           );
         } else {
           const channel = guild.channels.find(c => c.id === rm.channel);
+          if (!channel) {
+            log("\tI couldn't find the channel for a message, was it deleted?");
+            //Possibly delete the react stuff since it no longer exists?
+            continue;
+          }
           await channel.fetchMessage(rm.message).catch(console.error);
           log(`\tFetched message: ${rm.message}`);
         }
@@ -128,7 +133,7 @@ class ReadyListener extends Listener {
         "SELECT * FROM reaction_roles WHERE react_message_id = ? AND reaction_identifier = ?"
       );
       this.client.removeReactionRole = sql.prepare(
-        "DELETE FROM reaction_roles WHERE id = :id;"
+        "DELETE FROM reaction_roles WHERE id = ?;"
       );
       this.client.getAllReactionRoles = sql.prepare(
         "SELECT * FROM reaction_roles"

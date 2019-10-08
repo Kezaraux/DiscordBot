@@ -13,7 +13,7 @@ class StateCommand extends Command {
       aliases,
       category
     });
-    log("StateCommand created");
+    log(`${command}Command created`);
   }
 
   exec(message) {

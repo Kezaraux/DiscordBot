@@ -22,20 +22,22 @@ class AddReactionRoleCommand extends Command {
   }
 
   async exec(message, args) {
-    //console.log({message, args});
-    console.log({ args });
-
     const messageObj = this.client.getReactMessage.get(
       args.message,
       message.guild.id
     );
-    console.log({ messageObj });
+    if (!messageObj) {
+      return message.channel.send(
+        "Are you sure you gave the correct message ID?"
+      );
+    }
+
     const channel = message.guild.channels.find(
       c => c.id === messageObj.channel
     );
     if (!channel) {
       return message.channel.send(
-        "Didn't find the channel for the message, this should never happen."
+        "Didn't find the channel for the message, this should never happen unless the channel was deleted."
       );
     }
     const reactMsg = await channel
@@ -46,12 +48,6 @@ class AddReactionRoleCommand extends Command {
         "Did not find the message in the channel. Was it deleted?"
       );
     }
-
-    // const reaction = message.guild.emojis.find(e => e.identifier === args.reaction.id);
-    // console.log({reaction});
-    // if (!reaction) {
-    //   return message.channel.send("Please be sure to add a reaction to be used!");
-    // }
 
     const role =
       message.guild.roles.find(r => r.id === args.role) ||
@@ -85,8 +81,9 @@ export const help = {
   )}${command} <message id> <reaction/emoji> <role>`,
   aliases,
   blurb:
-    "A basic command to see if the bot works!" +
-    "\nThe bot will respond with 'Pong!'"
+    "This command adds a reaction associated to a role on " +
+    "a specified message. Make sure that message has been " +
+    "established for reaction roles or this will fail."
 };
 
 export default AddReactionRoleCommand;
