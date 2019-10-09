@@ -34,7 +34,7 @@ class MessageCommand extends Command {
 export const help = {
   isEnabled: config.get(`features.${category}`) || true,
   identifier: command,
-  usage: `${config.get("bot.prefix")}${command} <channel id> "<message content>"`,
+  usage: `${command} <channel id> "<message content>"`,
   aliases,
   blurb: "Sends a message to the specified channel with the contents"
 };

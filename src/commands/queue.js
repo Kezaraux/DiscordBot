@@ -98,7 +98,7 @@ const constructQueueMessage = store => {
 export const help = {
   isEnabled: config.get(`features.${category}`) || true,
   identifier: command,
-  usage: `${config.get("bot.prefix")}${command} <list/add/remove/clear> [song]`,
+  usage: `${command} <list/add/remove/clear> [song]`,
   aliases,
   blurb:
     "A command to manipulate the song queue." +

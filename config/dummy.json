@@ -4,9 +4,7 @@
     "ownerId": "YOUR DISCORD ID HERE"
   },
   "bot": {
-    "prefix": "!",
-    "blacklistedUsers": [""],
-    "newJoinLogChannel": "new-members"
+    "blacklistedUsers": [""]
   },
   "features": {
     "default": true,

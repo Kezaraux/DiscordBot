@@ -2,8 +2,7 @@ import { Listener } from "discord-akairo";
 import config from "config";
 
 import log from "../utils/logger";
-
-const newJoinLogChannel = config.get("bot.newJoinLogChannel") || "new-members";
+import { getGuildConfig } from "../selectors";
 
 class GuildMemberAddListener extends Listener {
   constructor() {
@@ -16,15 +15,24 @@ class GuildMemberAddListener extends Listener {
   }
 
   exec(member) {
-
     // Handle logging new members with invite codes
     member.guild.fetchInvites().then(invs => {
-        const oldGuildInvites = this.client.invites[member.guild.id];
-        this.client.invites[member.guild.id] = invs;
-        const invite = invs.find(i => oldGuildInvites.get(i.code).uses < i.uses);
-        const inviter = this.client.users.get(invite.inviter.id);
-        const logChannel = member.guild.channels.find(channel => channel.name === newJoinLogChannel);
-        logChannel.send(`${member.user.tag} joined using invite code ${invite.code} from ${inviter.tag}.\nInvite was used ${invite.uses} times since its creation.`);
+      const config = getGuildConfig(
+        this.client.store.getState(),
+        member.guild.id
+      );
+      const newJoinLogChannel = config.newJoinLogChannel || "new-members";
+
+      const oldGuildInvites = this.client.invites[member.guild.id];
+      this.client.invites[member.guild.id] = invs;
+      const invite = invs.find(i => oldGuildInvites.get(i.code).uses < i.uses);
+      const inviter = this.client.users.get(invite.inviter.id);
+      const logChannel = member.guild.channels.find(
+        channel => channel.name === newJoinLogChannel
+      );
+      logChannel.send(
+        `${member.user.tag} joined using invite code ${invite.code} from ${inviter.tag}.\nInvite was used ${invite.uses} times since its creation.`
+      );
     });
   }
 }

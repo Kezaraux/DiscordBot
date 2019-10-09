@@ -30,7 +30,7 @@ class ShutdownCommand extends Command {
 export const help = {
   isEnabled: config.get(`features.${category}`) || false,
   identifier: command,
-  usage: `${config.get("bot.prefix")}${command}`,
+  usage: `${command}`,
   aliases,
   blurb: "A command to shut down the bot"
 };

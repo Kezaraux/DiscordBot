@@ -32,3 +32,11 @@ export const SET_VOICE_CHANNEL = "SET_VOICE_CHANNEL";
 export const setVoiceChannel = vc => ({ type: SET_VOICE_CHANNEL, vc });
 export const SET_TEXT_CHANNEL = "SET_TEXT_CHANNEL";
 export const setTextChannel = tc => ({ type: SET_TEXT_CHANNEL, tc });
+
+export const LOAD_GUILD_CONFIGS = "LOAD_GUILD_CONFIGS";
+export const loadGuildConfigs = () => ({ type: LOAD_GUILD_CONFIGS });
+export const UPDATE_GUILD_CONFIG = "UPDATE_GUILD_CONFIG";
+export const updateGuildConfig = newCfg => ({
+  type: UPDATE_GUILD_CONFIG,
+  newCfg
+});

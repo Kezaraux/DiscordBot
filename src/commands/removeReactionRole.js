@@ -95,7 +95,7 @@ class RemoveReactionRoleCommand extends Command {
 export const help = {
   isEnabled: config.get(`features.${category}`) || true,
   identifier: command,
-  usage: `${config.get("bot.prefix")}${command} <message id> <reaction/emoji>`,
+  usage: `${command} <message id> <reaction/emoji>`,
   aliases,
   blurb:
     "This command adds a reaction associated to a role on " +

@@ -76,9 +76,7 @@ class AddReactionRoleCommand extends Command {
 export const help = {
   isEnabled: config.get(`features.${category}`) || true,
   identifier: command,
-  usage: `${config.get(
-    "bot.prefix"
-  )}${command} <message id> <reaction/emoji> <role>`,
+  usage: `${command} <message id> <reaction/emoji> <role>`,
   aliases,
   blurb:
     "This command adds a reaction associated to a role on " +

@@ -25,7 +25,7 @@ class StateCommand extends Command {
 export const help = {
   isEnabled: config.get(`features.${category}`) || false,
   identifier: command,
-  usage: `${config.get("bot.prefix")}${command}`,
+  usage: `${command}`,
   aliases,
   blurb: "Logs the current redux state to the console."
 };

@@ -48,7 +48,7 @@ class SetupReactionCommand extends Command {
 export const help = {
   isEnabled: config.get(`features.${category}`) || true,
   identifier: command,
-  usage: `${config.get("bot.prefix")}${command} <channel id> <message id>`,
+  usage: `${command} <channel id> <message id>`,
   aliases,
   blurb:
     "Reacts to a message with the specified emoji." +

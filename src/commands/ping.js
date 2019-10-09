@@ -24,7 +24,7 @@ class PingCommand extends Command {
 export const help = {
   isEnabled: config.get(`features.${category}`) || true,
   identifier: command,
-  usage: `${config.get("bot.prefix")}${command}`,
+  usage: `${command}`,
   aliases,
   blurb:
     "A basic command to see if the bot works!" +

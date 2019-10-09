@@ -3,8 +3,8 @@ import config from "config";
 
 import log from "../utils/logger";
 
-const command = "setupReaction";
-const aliases = [command, "setupReact", "setR", "sr", "doReact"];
+const command = "removeReaction";
+const aliases = [command, "removeReact", "remR", "rr", "delReact"];
 const category = "reactRoles";
 
 class RemoveReactionCommand extends Command {
@@ -48,7 +48,7 @@ class RemoveReactionCommand extends Command {
 export const help = {
   isEnabled: config.get(`features.${category}`) || true,
   identifier: command,
-  usage: `${config.get("bot.prefix")}${command} <channel id> <message id>`,
+  usage: `${command} <channel id> <message id>`,
   aliases,
   blurb:
     "Reacts to a message with the specified emoji." +

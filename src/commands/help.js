@@ -5,7 +5,8 @@ const fs = require("fs");
 const { promisify } = require("util");
 const readdir = promisify(fs.readdir);
 
-import log from "../utils/logger";
+import log, { logObj } from "../utils/logger";
+import { getGuildConfig } from "../selectors";
 
 const command = "help";
 const aliases = [command];
@@ -27,6 +28,11 @@ class HelpCommand extends Command {
   }
 
   async exec(message, args) {
+    const guildConfig = getGuildConfig(
+      this.client.store.getState(),
+      message.guild.id
+    );
+
     const cmdData = await getAllCommands();
     const helpEmbed = new RichEmbed();
     helpEmbed.setColor("WHITE");
@@ -36,7 +42,7 @@ class HelpCommand extends Command {
         return message.channel.send("That command doesn't exist!");
       } else {
         helpEmbed.setTitle(`Information for ${args.cmd}`);
-        helpEmbed.addField("Usage", cmd.usage);
+        helpEmbed.addField("Usage", `${guildConfig.prefix}${cmd.usage}`);
         const aliases = cmd.aliases.filter(a => a !== cmd.identifier);
         aliases.length > 0
           ? helpEmbed.addField(
@@ -58,7 +64,7 @@ class HelpCommand extends Command {
     );
     helpEmbed.addField(
       "For more information on a command",
-      `Use ${config.get("bot.prefix")}help [command]`
+      `Use ${guildConfig.prefix}help [command]`
     );
 
     return message.channel.send(helpEmbed);
@@ -93,7 +99,7 @@ export const help = {
   isEnabled: config.get(`features.${category}`) || true,
   identifier: command,
   aliases,
-  usage: `${config.get("bot.prefix")}help [command]`,
+  usage: `${command} [command]`,
   blurb:
     "Use this command on it's own to get a list of all the commands." +
     "\nUse the command while specifying another command to get detailed information on that command!" +

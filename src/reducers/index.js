@@ -1,5 +1,6 @@
 import * as actions from "../actions";
 import { combineReducers } from "redux";
+import configs_by_guild_id from "./config";
 
 const baseConstructState = {
   queue: [],
@@ -62,6 +63,7 @@ const errorMessage = (state = null, action) => {
 
 const rootReducer = combineReducers({
   songConstruct,
+  configs_by_guild_id,
   errorMessage
 });
 

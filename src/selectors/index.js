@@ -1,4 +1,5 @@
 import * as songConstruct from "./songConstruct";
+import * as config from "./config";
 
 export const getError = state => state.error;
 
@@ -16,3 +17,6 @@ export const getCurrentSong = state =>
   songConstruct.getCurrentSong(state.songConstruct);
 export const getPlaying = state =>
   songConstruct.getPlaying(state.songConstruct);
+
+export const getGuildConfig = (state, guild_id) =>
+  config.getGuildConfig(state.configs_by_guild_id, guild_id);
