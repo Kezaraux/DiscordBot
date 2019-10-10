@@ -1,5 +1,6 @@
 {
   "prefix": "!",
   "ownerId": "128762363166982144",
-  "newJoinLogChannel": "new-members"
+  "newJoinLogChannel": "new-members",
+  "adminRole": "Administrator"
 }

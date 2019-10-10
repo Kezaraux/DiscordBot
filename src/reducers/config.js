@@ -1,6 +1,12 @@
 import * as actions from "../actions";
 import SQLite from "better-sqlite3";
+import config from "config";
 const sql = new SQLite("./bot.db");
+
+import setupInitialGuildConfig from "../utils/initialConfigDb";
+const initialConfig = require("../../config/initialDbConfig.json");
+
+setupInitialGuildConfig(sql, config.get("setup.guildId"), initialConfig);
 
 const getAllGuildConfigs = sql.prepare("SELECT * FROM guild_config");
 const saveGuildConfig = sql.prepare(

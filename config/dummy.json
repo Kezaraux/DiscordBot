@@ -3,6 +3,9 @@
     "botKey": "YOUR BOT KEY HERE",
     "ownerId": "YOUR DISCORD ID HERE"
   },
+  "setup": {
+    "guildId": "YOUR GUILD ID HERE"
+  },
   "bot": {
     "blacklistedUsers": [""]
   },
