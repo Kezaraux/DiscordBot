@@ -132,6 +132,9 @@ class ReadyListener extends Listener {
       this.client.getReactionRole = sql.prepare(
         "SELECT * FROM reaction_roles WHERE react_message_id = ? AND reaction_identifier = ?"
       );
+      this.client.getReactionRolesForMessage = sql.prepare(
+        "SELECT * FROM reaction_roles WHERE react_message_id = ?"
+      );
       this.client.removeReactionRole = sql.prepare(
         "DELETE FROM reaction_roles WHERE id = ?;"
       );

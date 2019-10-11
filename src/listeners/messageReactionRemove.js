@@ -20,7 +20,7 @@ class MessageReactionRemoveListener extends Listener {
     if (!reactionRole) {
       log(
         "Message not found in DB OR emoji isn't established for message in DB" +
-          "\nBot could have deleted a reaction role and is removing reactions."
+          "\n\tBot could have deleted a reaction role and is removing reactions."
       );
       return;
     }
