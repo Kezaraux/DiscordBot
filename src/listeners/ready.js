@@ -7,6 +7,7 @@ import {
   getGuildConfig,
   saveGuildConfig
 } from "../utils/database";
+import { loadGuildConfigs } from "../actions";
 
 const defaultConfig = require("../../config/initialDbConfig.json");
 const wait = require("util").promisify(setTimeout);
@@ -35,6 +36,7 @@ class ReadyListener extends Listener {
         });
       }
     });
+    this.client.store.dispatch(loadGuildConfigs());
     log("\tDone checking configs");
 
     if (config.get("features.reactRoles")) {
