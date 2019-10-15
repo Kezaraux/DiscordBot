@@ -2,6 +2,7 @@ import { Command } from "discord-akairo";
 import config from "config";
 
 import log from "../utils/logger";
+import { getReactMessage, addReactionRole } from "../utils/database";
 
 const command = "addReactionRole";
 const aliases = [command, "arr"];
@@ -22,10 +23,7 @@ class AddReactionRoleCommand extends Command {
   }
 
   async exec(message, args) {
-    const messageObj = this.client.getReactMessage.get(
-      args.message,
-      message.guild.id
-    );
+    const messageObj = getReactMessage.get(args.message, message.guild.id);
     if (!messageObj) {
       return message.channel.send(
         "Are you sure you gave the correct message ID?"
@@ -66,7 +64,7 @@ class AddReactionRoleCommand extends Command {
     };
 
     reactMsg.react(args.reaction);
-    this.client.addReactionRole.run(data);
+    addReactionRole.run(data);
     return message.channel.send(
       `${args.reaction} has been set as a trigger for @${role.name} on the specified message.`
     );

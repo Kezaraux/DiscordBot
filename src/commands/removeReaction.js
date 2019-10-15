@@ -2,6 +2,12 @@ import { Command } from "discord-akairo";
 import config from "config";
 
 import log, { logObj } from "../utils/logger";
+import {
+  getReactMessage,
+  getReactionRolesForMessage,
+  removeReactMessage,
+  removeReactionRole
+} from "../utils/database";
 
 const command = "removeReaction";
 const aliases = [command, "removeReact", "remR", "rr", "delReact"];
@@ -18,7 +24,7 @@ class RemoveReactionCommand extends Command {
   }
 
   async exec(message, args) {
-    const dbReactMessage = this.client.getReactMessage.get(
+    const dbReactMessage = getReactMessage.get(
       args.messageId,
       message.guild.id
     );
@@ -41,7 +47,7 @@ class RemoveReactionCommand extends Command {
       );
     }
 
-    const dbReactionRolesForMessage = this.client.getReactionRolesForMessage.all(
+    const dbReactionRolesForMessage = getReactionRolesForMessage.all(
       args.messageId
     );
 
@@ -54,7 +60,7 @@ class RemoveReactionCommand extends Command {
         log(
           `\tIt appears that the role associated with ${reaction.reaction_identifier} has been deleted`
         );
-        this.client.removeReactionRole.run(reaction.id);
+        removeReactionRole.run(reaction.id);
         continue;
       }
       const reactionOnMessage = reactMessage.reactions.find(
@@ -64,7 +70,7 @@ class RemoveReactionCommand extends Command {
         log(
           "\tThe reaction couldn't be found on the message, we're they all removed?"
         );
-        this.client.removeReactionRole.run(reaction.id);
+        removeReactionRole.run(reaction.id);
         continue;
       }
       reactionOnMessage.users.forEach(async user => {
@@ -77,10 +83,10 @@ class RemoveReactionCommand extends Command {
           : guildMem.removeRole(role);
       });
       log(`\tRemoving reaction role of id ${reaction.id} from the database`);
-      this.client.removeReactionRole.run(reaction.id);
+      removeReactionRole.run(reaction.id);
     }
 
-    this.client.removeReactMessage.run(dbReactMessage.id);
+    removeReactMessage.run(dbReactMessage.id);
     log(
       `The reaction message of id ${dbReactMessage.id} and all its roles have been deleted`
     );

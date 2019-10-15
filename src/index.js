@@ -1,13 +1,9 @@
 import { AkairoClient } from "discord-akairo";
-import SQLite from "better-sqlite3";
 import config from "config";
 
 import log from "./utils/logger";
 import configureStore from "./utils/store";
-import setupInitialGuildConfig from "./utils/initialConfigDb";
-const initialDbConfig = require("../config/initialDbConfig.json");
-
-const sql = new SQLite("./bot.db");
+import sql from "./utils/database";
 
 const client = new AkairoClient({
   ownerID: config.get("private.ownerId"),
@@ -45,6 +41,5 @@ client.store = configureStore();
 client.db = sql;
 
 client.login(config.get("private.botKey")).then(() => {
-  //client.store = configureStore();
   log("Bot has logged in.");
 });

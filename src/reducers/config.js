@@ -1,17 +1,19 @@
 import * as actions from "../actions";
-import SQLite from "better-sqlite3";
+// import SQLite from "better-sqlite3";
 import config from "config";
-const sql = new SQLite("./bot.db");
+// const sql = new SQLite("./bot.db");
 
-import setupInitialGuildConfig from "../utils/initialConfigDb";
-const initialConfig = require("../../config/initialDbConfig.json");
+import { getAllGuildConfigs, saveGuildConfig } from "../utils/database";
 
-setupInitialGuildConfig(sql, config.get("setup.guildId"), initialConfig);
+// import setupInitialGuildConfig from "../utils/initialConfigDb";
+// const initialConfig = require("../../config/initialDbConfig.json");
 
-const getAllGuildConfigs = sql.prepare("SELECT * FROM guild_config");
-const saveGuildConfig = sql.prepare(
-  "INSERT OR REPLACE INTO guild_config (guild_id, config) values (@guild_id, @config)"
-);
+// setupInitialGuildConfig(sql, config.get("setup.guildId"), initialConfig);
+
+// const getAllGuildConfigs = sql.prepare("SELECT * FROM guild_config");
+// const saveGuildConfig = sql.prepare(
+//   "INSERT OR REPLACE INTO guild_config (guild_id, config) values (@guild_id, @config)"
+// );
 
 const allConfigs = getAllGuildConfigs.all();
 const baseState = {};
