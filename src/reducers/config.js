@@ -1,6 +1,11 @@
-import * as actions from "../actions";
+import { omit } from "lodash";
 
-import { getAllGuildConfigs, saveGuildConfig } from "../utils/database";
+import * as actions from "../actions";
+import {
+  getAllGuildConfigs,
+  saveGuildConfig,
+  removeGuildConfig
+} from "../utils/database";
 
 const allConfigs = getAllGuildConfigs.all();
 const baseState = {};
@@ -26,6 +31,9 @@ const configs_by_guild_id = (state = baseState, action) => {
         config: newCfgStr
       });
       return { ...state, [action.newCfg.guild_id]: action.newCfg.config };
+    case actions.DELETE_GUILD_CONFIG:
+      removeGuildConfig.run(action.guild_id.guild_id);
+      return { ...omit(state, action.guild_id.guild_id) };
     default:
       return state;
   }

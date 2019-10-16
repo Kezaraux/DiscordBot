@@ -21,6 +21,7 @@ class GuildCreateListener extends Listener {
     this.client.store.dispatch(
       updateGuildConfig({ guild_id: guild.id, config: initialConfig })
     );
+    log(`Config created for guild ${guild.name}`);
   }
 }
 

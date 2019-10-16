@@ -149,6 +149,9 @@ export const getGuildConfig = sql.prepare(
 export const saveGuildConfig = sql.prepare(
   "INSERT OR REPLACE INTO guild_config (guild_id, config) values (@guild_id, @config)"
 );
+export const removeGuildConfig = sql.prepare(
+  "DELETE FROM guild_config WHERE guild_id = ?"
+);
 
 log("Database is ready with correct features");
 
