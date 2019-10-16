@@ -27,6 +27,7 @@ export const help = {
   identifier: command,
   usage: `${command}`,
   aliases,
+  category,
   blurb: "Logs the current redux state to the console."
 };
 

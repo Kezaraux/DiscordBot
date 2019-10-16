@@ -96,6 +96,7 @@ export const help = {
   identifier: command,
   usage: `${command} <message id> <reaction/emoji>`,
   aliases,
+  category,
   blurb:
     "This command adds a reaction associated to a role on " +
     "a specified message. Make sure that message has been " +

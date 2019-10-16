@@ -19,6 +19,18 @@ class PrefixCommand extends Command {
     log(`${command}Command created`);
   }
 
+  userPermissions(message) {
+    const guildConfig = getGuildConfig(
+      this.client.store.getState(),
+      message.guild.id
+    );
+    return (
+      message.member.roles.exists(
+        role => role.name === guildConfig.adminRole
+      ) || message.author.id === config.get("private.ownerId")
+    );
+  }
+
   exec(message, args) {
     if (!args.prefix) {
       return message.channel.send("Please provide a new prefix to change to!");
@@ -46,6 +58,7 @@ export const help = {
   identifier: command,
   usage: `${command} <prefix>`,
   aliases,
+  category,
   blurb: "A command to change the command prefix for this guild."
 };
 

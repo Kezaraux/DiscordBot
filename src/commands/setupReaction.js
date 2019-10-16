@@ -51,6 +51,7 @@ export const help = {
   identifier: command,
   usage: `${command} <channel id> <message id>`,
   aliases,
+  category,
   blurb:
     "Reacts to a message with the specified emoji." +
     "Anyone who clicks that reaction will gain the associated role"

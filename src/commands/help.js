@@ -33,11 +33,22 @@ class HelpCommand extends Command {
       message.guild.id
     );
 
+    const hasAdminRole = message.member.roles.find(
+      r => r.name === guildConfig.adminRole
+    );
+    if (hasAdminRole) {
+      log("Help command, has admin role!");
+    }
+
     const cmdData = await getAllCommands();
     const helpEmbed = new RichEmbed();
     helpEmbed.setColor("WHITE");
+    helpEmbed.setFooter(
+      "Square brackets denote an optional argument. Triangle brackets denote a required argument."
+    );
+    // If the user tried to specify a command for help
     if (args.cmd) {
-      const cmd = cmdData.find(cmd => cmd.identifier === args.cmd);
+      const cmd = cmdData.find(cmd => cmd.aliases.includes(args.cmd));
       if (cmd === undefined) {
         return message.channel.send("That command doesn't exist!");
       } else {
@@ -46,7 +57,7 @@ class HelpCommand extends Command {
         const aliases = cmd.aliases.filter(a => a !== cmd.identifier);
         aliases.length > 0
           ? helpEmbed.addField(
-              `You can use the following instead of ${args.cmd}`,
+              `You can use the following instead of ${cmd.identifier}`,
               aliases.join(", ")
             )
           : null;
@@ -54,18 +65,40 @@ class HelpCommand extends Command {
         return message.channel.send(helpEmbed);
       }
     }
-    helpEmbed.setTitle("List of commands");
-    helpEmbed.addField(
-      "Commands",
-      cmdData
-        .filter(cmd => cmd.isEnabled)
-        .map(cmd => cmd.identifier)
-        .join(", ")
-    );
+
+    // No command specified, give a list of all commands
+    const cmdObject = cmdData.reduce((result, cmd) => {
+      if (!result[cmd.category]) {
+        result[cmd.category] = [];
+      }
+
+      result[cmd.category].push(cmd.identifier);
+      return result;
+    }, {});
+
+    helpEmbed.setTitle("List of commands by category");
+    Object.keys(cmdObject).forEach(key => {
+      if (key === "admin" && !hasAdminRole) {
+        return;
+      }
+      helpEmbed.addField(
+        `${key} category:`,
+        cmdObject[key].join(", ") +
+          (hasAdminRole && key === "admin"
+            ? `\nThese commands require you to have the \`${guildConfig.adminRole}\` role\nEnsure this role exists on your server, or update the config to change the role`
+            : "")
+      );
+    });
     helpEmbed.addField(
       "For more information on a command",
-      `Use ${guildConfig.prefix}help [command]`
+      `Use ${guildConfig.prefix}help [command]\nIf you know an alias for a command those will work as well`
     );
+    if (!hasAdminRole) {
+      helpEmbed.addField(
+        "Other information",
+        `Admin commands will not be listed unless you have the role \`${guildConfig.adminRole}\``
+      );
+    }
 
     return message.channel.send(helpEmbed);
   }
@@ -82,13 +115,6 @@ const getAllCommands = async () => {
   let cmdList = [];
   cmdFiles.forEach(file => {
     const help = require(`./${file}`).help;
-    /*cmdList.push({
-      isHidden: help.isHidden,
-      identifier: help.identifier,
-      aliases: help.aliases,
-      usage: help.usage,
-      blurb: help.blurb
-    });*/
     cmdList.push(help);
   });
 
@@ -99,6 +125,7 @@ export const help = {
   isEnabled: config.get(`features.${category}`) || true,
   identifier: command,
   aliases,
+  category,
   usage: `${command} [command]`,
   blurb:
     "Use this command on it's own to get a list of all the commands." +

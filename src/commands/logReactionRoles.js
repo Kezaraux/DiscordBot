@@ -37,6 +37,7 @@ export const help = {
   identifier: command,
   usage: `${command}`,
   aliases,
+  category,
   blurb: "Logs all the items found in the reaction messages table"
 };
 

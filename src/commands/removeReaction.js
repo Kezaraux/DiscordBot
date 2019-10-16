@@ -102,6 +102,7 @@ export const help = {
   identifier: command,
   usage: `${command} <message id>`,
   aliases,
+  category,
   blurb:
     "Removes all roles from users that have reacted to the message " +
     "and removes all database associations."

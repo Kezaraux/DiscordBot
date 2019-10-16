@@ -26,6 +26,7 @@ export const help = {
   identifier: command,
   usage: `${command}`,
   aliases,
+  category,
   blurb:
     "A basic command to see if the bot works!" +
     "\nThe bot will respond with 'Pong!'"

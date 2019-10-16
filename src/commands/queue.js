@@ -100,6 +100,7 @@ export const help = {
   identifier: command,
   usage: `${command} <list/add/remove/clear> [song]`,
   aliases,
+  category,
   blurb:
     "A command to manipulate the song queue." +
     "Can be used to add, remove, and clear the queue." +
