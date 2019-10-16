@@ -1,6 +1,8 @@
 import { Listener } from "discord-akairo";
 
 import log, { logObj } from "../utils/logger";
+import { updateGuildConfig } from "../actions";
+const initialConfig = require("../../config/initialDbConfig.json");
 
 const event = "guildCreate";
 
@@ -16,10 +18,9 @@ class GuildCreateListener extends Listener {
 
   exec(guild) {
     log(`Bot has joined guild: ${guild.name}`);
-    // logObj(
-    //   "Here are all configs from DB: ",
-    //   sql.prepare("SELECT * FROM guild_config").all()
-    // );
+    this.client.store.dispatch(
+      updateGuildConfig({ guild_id: guild.id, config: initialConfig })
+    );
   }
 }
 
