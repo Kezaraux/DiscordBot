@@ -1,6 +1,7 @@
 import { Listener } from "discord-akairo";
 
 import log, { logObj } from "../utils/logger";
+import { getReactionRole } from "../utils/database";
 
 class MessageReactionAddListener extends Listener {
   constructor() {
@@ -13,7 +14,7 @@ class MessageReactionAddListener extends Listener {
   }
 
   exec(msgReact, user) {
-    const reactionRole = this.client.getReactionRole.get(
+    const reactionRole = getReactionRole.get(
       msgReact.message.id,
       msgReact.emoji.name
     );

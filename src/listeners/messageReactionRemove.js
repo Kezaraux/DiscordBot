@@ -1,6 +1,7 @@
 import { Listener } from "discord-akairo";
 
 import log from "../utils/logger";
+import { getReactionRole } from "../utils/database";
 
 class MessageReactionRemoveListener extends Listener {
   constructor() {
@@ -13,14 +14,14 @@ class MessageReactionRemoveListener extends Listener {
   }
 
   exec(msgReact, user) {
-    const reactionRole = this.client.getReactionRole.get(
+    const reactionRole = getReactionRole.get(
       msgReact.message.id,
       msgReact.emoji.name
     );
     if (!reactionRole) {
       log(
         "Message not found in DB OR emoji isn't established for message in DB" +
-          "\nBot could have deleted a reaction role and is removing reactions."
+          "\n\tBot could have deleted a reaction role and is removing reactions."
       );
       return;
     }

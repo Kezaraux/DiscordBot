@@ -36,6 +36,7 @@ export const help = {
   identifier: command,
   usage: `${command} <channel id> "<message content>"`,
   aliases,
+  category,
   blurb: "Sends a message to the specified channel with the contents"
 };
 

@@ -2,6 +2,7 @@ import { Listener } from "discord-akairo";
 import config from "config";
 
 import log from "../utils/logger";
+import { getScore, setScore } from "../utils/database";
 
 class MessageReactionAddListener extends Listener {
   constructor() {
@@ -16,10 +17,7 @@ class MessageReactionAddListener extends Listener {
     if (config.get("features.score")) {
       if (!message.author.bot) {
         log("\tGot message");
-        let score = this.client.getScore.get(
-          message.author.id,
-          message.guild.id
-        );
+        let score = getScore.get(message.author.id, message.guild.id);
         if (!score) {
           score = {
             id: `${message.guild.id}-${message.author.id}`,
@@ -37,7 +35,7 @@ class MessageReactionAddListener extends Listener {
           score.level++;
           message.reply(`You've leveled up to level ${curLevel}! Congrats!`);
         }
-        this.client.setScore.run(score);
+        setScore.run(score);
       }
     }
   }

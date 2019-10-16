@@ -1,7 +1,13 @@
 import { Command } from "discord-akairo";
 import config from "config";
 
-import log from "../utils/logger";
+import log, { logObj } from "../utils/logger";
+import {
+  getReactMessage,
+  getReactionRolesForMessage,
+  removeReactMessage,
+  removeReactionRole
+} from "../utils/database";
 
 const command = "removeReaction";
 const aliases = [command, "removeReact", "remR", "rr", "delReact"];
@@ -12,35 +18,81 @@ class RemoveReactionCommand extends Command {
     super(command, {
       aliases,
       category,
-      args: [
-        { id: "channel", type: "string" },
-        { id: "messageId", type: "string" }
-      ]
+      args: [{ id: "messageId", type: "string" }]
     });
     log(`${command}Command created`);
   }
 
   async exec(message, args) {
-    const channel = message.guild.channels.find(c => c.id === args.channel);
+    const dbReactMessage = getReactMessage.get(
+      args.messageId,
+      message.guild.id
+    );
+    if (!dbReactMessage) {
+      return message.channel.send(
+        "I couldn't find an entry in the database for that message."
+      );
+    }
+
+    const channel = message.guild.channels.find(
+      c => c.id === dbReactMessage.channel
+    );
     if (!channel) {
       return message.channel.send("I couldn't find the channel you specified!");
     }
-    const toBeReactMessage = await channel.fetchMessage(args.messageId);
-    if (!toBeReactMessage) {
-      return message.channel.send("I couldn't find the message you specified!");
+    const reactMessage = await channel.fetchMessage(args.messageId);
+    if (!reactMessage) {
+      return message.channel.send(
+        "I couldn't find the message in the channel you specified!"
+      );
     }
 
-    const data = {
-      id: `${message.guild.id}-${toBeReactMessage.id}`,
-      message: toBeReactMessage.id,
-      channel: channel.id,
-      guild: message.guild.id
-    };
+    const dbReactionRolesForMessage = getReactionRolesForMessage.all(
+      args.messageId
+    );
 
-    this.client.addReactMessage.run(data);
-    log("Added reaction message to database");
+    for (let i = 0; i < dbReactionRolesForMessage.length; i++) {
+      const reaction = dbReactionRolesForMessage[i];
+      const role = message.guild.roles.find(
+        role => role.id === reaction.role_id
+      );
+      if (!role) {
+        log(
+          `\tIt appears that the role associated with ${reaction.reaction_identifier} has been deleted`
+        );
+        removeReactionRole.run(reaction.id);
+        continue;
+      }
+      const reactionOnMessage = reactMessage.reactions.find(
+        r => r.emoji.name === reaction.reaction_identifier
+      );
+      if (!reactionOnMessage) {
+        log(
+          "\tThe reaction couldn't be found on the message, we're they all removed?"
+        );
+        removeReactionRole.run(reaction.id);
+        continue;
+      }
+      reactionOnMessage.users.forEach(async user => {
+        reactionOnMessage.remove(user);
+        const guildMem = await message.guild.fetchMember(user);
+        !guildMem
+          ? log(
+              `\tAttempted to grab user ${u.username}, but they aren't on this guild`
+            )
+          : guildMem.removeRole(role);
+      });
+      log(`\tRemoving reaction role of id ${reaction.id} from the database`);
+      removeReactionRole.run(reaction.id);
+    }
+
+    removeReactMessage.run(dbReactMessage.id);
+    log(
+      `The reaction message of id ${dbReactMessage.id} and all its roles have been deleted`
+    );
+
     return message.channel.send(
-      "The message has been added as a reaction message!"
+      "The reaction message and all associated reaction roles have been deleted."
     );
   }
 }
@@ -48,11 +100,12 @@ class RemoveReactionCommand extends Command {
 export const help = {
   isEnabled: config.get(`features.${category}`) || true,
   identifier: command,
-  usage: `${command} <channel id> <message id>`,
+  usage: `${command} <message id>`,
   aliases,
+  category,
   blurb:
-    "Reacts to a message with the specified emoji." +
-    "Anyone who clicks that reaction will gain the associated role"
+    "Removes all roles from users that have reacted to the message " +
+    "and removes all database associations."
 };
 
 export default RemoveReactionCommand;

@@ -3,6 +3,7 @@ import { RichEmbed } from "discord.js";
 import config from "config";
 
 import log, { logObj } from "../utils/logger";
+import { getAllReactionRoles } from "../utils/database";
 
 const command = "logRoleTable";
 const aliases = [command, "lrt"];
@@ -18,7 +19,7 @@ class LogReactRolesTableCommand extends Command {
   }
 
   exec(message) {
-    const reactionRoles = this.client.getAllReactionRoles.all();
+    const reactionRoles = getAllReactionRoles.all();
     logObj("Logging reaction roles", reactionRoles);
     const embed = new RichEmbed().setTitle("Reaction Roles").setColor("GREEN");
     reactionRoles.forEach(r => {
@@ -36,6 +37,7 @@ export const help = {
   identifier: command,
   usage: `${command}`,
   aliases,
+  category,
   blurb: "Logs all the items found in the reaction messages table"
 };
 

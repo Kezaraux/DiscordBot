@@ -2,6 +2,7 @@ import { Command } from "discord-akairo";
 import config from "config";
 
 import log from "../utils/logger";
+import { addReactMessage } from "../utils/database";
 
 const command = "setupReaction";
 const aliases = [command, "setupReact", "setR", "sr", "doReact"];
@@ -37,7 +38,7 @@ class SetupReactionCommand extends Command {
       guild: message.guild.id
     };
 
-    this.client.addReactMessage.run(data);
+    addReactMessage.run(data);
     log("Added reaction message to database");
     return message.channel.send(
       "The message has been added as a reaction message!"
@@ -50,6 +51,7 @@ export const help = {
   identifier: command,
   usage: `${command} <channel id> <message id>`,
   aliases,
+  category,
   blurb:
     "Reacts to a message with the specified emoji." +
     "Anyone who clicks that reaction will gain the associated role"

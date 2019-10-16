@@ -56,8 +56,10 @@ class ConfigCommand extends Command {
       this.client.store.getState(),
       message.guild.id
     );
-    return message.member.roles.exists(
-      role => role.name === guildConfig.adminRole
+    return (
+      message.member.roles.exists(
+        role => role.name === guildConfig.adminRole
+      ) || message.author.id === config.get("private.ownerId")
     );
   }
 
@@ -86,6 +88,7 @@ export const help = {
   identifier: command,
   usage: `${command}`,
   aliases,
+  category,
   blurb: "Use this command to change the config for this guild"
 };
 

@@ -1,17 +1,11 @@
+import { omit } from "lodash";
+
 import * as actions from "../actions";
-import SQLite from "better-sqlite3";
-import config from "config";
-const sql = new SQLite("./bot.db");
-
-import setupInitialGuildConfig from "../utils/initialConfigDb";
-const initialConfig = require("../../config/initialDbConfig.json");
-
-setupInitialGuildConfig(sql, config.get("setup.guildId"), initialConfig);
-
-const getAllGuildConfigs = sql.prepare("SELECT * FROM guild_config");
-const saveGuildConfig = sql.prepare(
-  "INSERT OR REPLACE INTO guild_config (guild_id, config) values (@guild_id, @config)"
-);
+import {
+  getAllGuildConfigs,
+  saveGuildConfig,
+  removeGuildConfig
+} from "../utils/database";
 
 const allConfigs = getAllGuildConfigs.all();
 const baseState = {};
@@ -37,6 +31,9 @@ const configs_by_guild_id = (state = baseState, action) => {
         config: newCfgStr
       });
       return { ...state, [action.newCfg.guild_id]: action.newCfg.config };
+    case actions.DELETE_GUILD_CONFIG:
+      removeGuildConfig.run(action.guild_id.guild_id);
+      return { ...omit(state, action.guild_id.guild_id) };
     default:
       return state;
   }

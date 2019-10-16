@@ -3,6 +3,7 @@ import { RichEmbed } from "discord.js";
 import config from "config";
 
 import log, { logObj } from "../utils/logger";
+import { getAllReactMessages } from "../utils/database";
 
 const command = "logMsgTable";
 const aliases = [command, "lmt"];
@@ -18,7 +19,7 @@ class LogReactMessageTableCommand extends Command {
   }
 
   exec(message) {
-    const reactionMessages = this.client.getAllReactMessages.all();
+    const reactionMessages = getAllReactMessages.all();
     logObj("Logging reaction messages", reactionMessages);
     const embed = new RichEmbed()
       .setTitle("Reaction Messages")
@@ -38,6 +39,7 @@ export const help = {
   identifier: command,
   usage: `${command}`,
   aliases,
+  category,
   blurb: "Logs all the items found in the reaction messages table"
 };
 

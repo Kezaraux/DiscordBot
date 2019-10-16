@@ -40,3 +40,8 @@ export const updateGuildConfig = newCfg => ({
   type: UPDATE_GUILD_CONFIG,
   newCfg
 });
+export const DELETE_GUILD_CONFIG = "DELETE_GUILD_CONFIG";
+export const deleteGuildConfig = guild_id => ({
+  type: DELETE_GUILD_CONFIG,
+  guild_id
+});

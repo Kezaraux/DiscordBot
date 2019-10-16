@@ -2,6 +2,11 @@ import { Command } from "discord-akairo";
 import config from "config";
 
 import log from "../utils/logger";
+import {
+  getReactMessage,
+  getReactionRole,
+  removeReactionRole
+} from "../utils/database";
 
 const command = "removeReactionRole";
 const aliases = [command, "rrr"];
@@ -22,10 +27,7 @@ class RemoveReactionRoleCommand extends Command {
 
   async exec(message, args) {
     // Get the reaction message from DB
-    const messageObj = this.client.getReactMessage.get(
-      args.message,
-      message.guild.id
-    );
+    const messageObj = getReactMessage.get(args.message, message.guild.id);
     if (!messageObj) {
       return message.channel.send(
         "Are you sure you gave the correct message ID?"
@@ -53,10 +55,7 @@ class RemoveReactionRoleCommand extends Command {
     }
 
     // Get the reaction role that we want to work with
-    const reactRole = this.client.getReactionRole.get(
-      messageObj.message,
-      args.reaction
-    );
+    const reactRole = getReactionRole.get(messageObj.message, args.reaction);
     if (!reactRole) {
       return message.channel.send(
         `Couldn't find the react role with the ${args.reaction} for the message.`
@@ -85,7 +84,7 @@ class RemoveReactionRoleCommand extends Command {
         : guildMem.removeRole(role);
     });
 
-    this.client.removeReactionRole.run(`${message.guild.id}-${role.id}`);
+    removeReactionRole.run(`${message.guild.id}-${role.id}`);
     return message.channel.send(
       `${args.reaction} has been removed from the specified message.`
     );
@@ -97,6 +96,7 @@ export const help = {
   identifier: command,
   usage: `${command} <message id> <reaction/emoji>`,
   aliases,
+  category,
   blurb:
     "This command adds a reaction associated to a role on " +
     "a specified message. Make sure that message has been " +
