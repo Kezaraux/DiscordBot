@@ -10,35 +10,32 @@ const aliases = [command, "lrt"];
 const category = "devUtils";
 
 class LogReactRolesTableCommand extends Command {
-  constructor() {
-    super(command, {
-      aliases,
-      category
-    });
-    log(`${command}Command created`);
-  }
+    constructor() {
+        super(command, {
+            aliases,
+            category
+        });
+        log(`${command}Command created`);
+    }
 
-  exec(message) {
-    const reactionRoles = getAllReactionRoles.all();
-    logObj("Logging reaction roles", reactionRoles);
-    const embed = new RichEmbed().setTitle("Reaction Roles").setColor("GREEN");
-    reactionRoles.forEach(r => {
-      embed.addField(
-        `Message ID: ${r.react_message_id}`,
-        r.reaction_identifier
-      );
-    });
-    return message.channel.send(embed);
-  }
+    exec(message) {
+        const reactionRoles = getAllReactionRoles.all();
+        logObj("Logging reaction roles", reactionRoles);
+        const embed = new RichEmbed().setTitle("Reaction Roles").setColor("GREEN");
+        reactionRoles.forEach(r => {
+            embed.addField(`Message ID: ${r.react_message_id}`, r.reaction_identifier);
+        });
+        return message.channel.send(embed);
+    }
 }
 
 export const help = {
-  isEnabled: config.get(`features.${category}`) || false,
-  identifier: command,
-  usage: `${command}`,
-  aliases,
-  category,
-  blurb: "Logs all the items found in the reaction messages table"
+    isEnabled: config.get(`features.${category}`) || false,
+    identifier: command,
+    usage: `${command}`,
+    aliases,
+    category,
+    blurb: "Logs all the items found in the reaction messages table"
 };
 
 export default LogReactRolesTableCommand;

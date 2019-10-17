@@ -5,18 +5,18 @@ import log from "../utils/logger";
 const event = "error";
 
 class ErrorListener extends Listener {
-  constructor() {
-    super(event, {
-      emitter: "client",
-      eventName: event
-    });
+    constructor() {
+        super(event, {
+            emitter: "client",
+            eventName: event
+        });
 
-    log(`${event}Listener created`);
-  }
+        log(`${event}Listener created`);
+    }
 
-  exec(e) {
-    console.error(e);
-  }
+    exec(e) {
+        console.error(e);
+    }
 }
 
 export default ErrorListener;

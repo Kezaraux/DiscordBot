@@ -6,20 +6,20 @@ import log from "../utils/logger";
 const event = "debug";
 
 class DebugListener extends Listener {
-  constructor() {
-    super(event, {
-      emitter: "client",
-      eventName: event
-    });
+    constructor() {
+        super(event, {
+            emitter: "client",
+            eventName: event
+        });
 
-    log(`${event}Listener created`);
-  }
-
-  exec(e) {
-    if (config.get("features.debug")) {
-      console.info(e);
+        log(`${event}Listener created`);
     }
-  }
+
+    exec(e) {
+        if (config.get("features.debug")) {
+            console.info(e);
+        }
+    }
 }
 
 export default DebugListener;

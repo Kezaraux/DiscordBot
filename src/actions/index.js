@@ -13,8 +13,8 @@ export const SET_VOLUME = "SET_VOLUME";
 export const setVolume = vol => ({ type: SET_VOLUME, vol });
 export const SET_SONG_DISPATCHER = "SET_SONG_DISPATCHER";
 export const setSongDispatcher = dispatch => ({
-  type: SET_SONG_DISPATCHER,
-  dispatch
+    type: SET_SONG_DISPATCHER,
+    dispatch
 });
 export const MOVE_TO_NEXT_SONG = "MOVE_TO_NEXT_SONG";
 export const moveToNextSong = () => ({ type: MOVE_TO_NEXT_SONG });
@@ -25,8 +25,8 @@ export const resetSongConstruct = () => ({ type: RESET_SONG_CONSTRUCT });
 
 export const SET_VOICE_CONNECTION = "SET_VOICE_CONNECTION";
 export const setVoiceConnection = connection => ({
-  type: SET_VOICE_CONNECTION,
-  connection
+    type: SET_VOICE_CONNECTION,
+    connection
 });
 export const SET_VOICE_CHANNEL = "SET_VOICE_CHANNEL";
 export const setVoiceChannel = vc => ({ type: SET_VOICE_CHANNEL, vc });
@@ -37,11 +37,11 @@ export const LOAD_GUILD_CONFIGS = "LOAD_GUILD_CONFIGS";
 export const loadGuildConfigs = () => ({ type: LOAD_GUILD_CONFIGS });
 export const UPDATE_GUILD_CONFIG = "UPDATE_GUILD_CONFIG";
 export const updateGuildConfig = newCfg => ({
-  type: UPDATE_GUILD_CONFIG,
-  newCfg
+    type: UPDATE_GUILD_CONFIG,
+    newCfg
 });
 export const DELETE_GUILD_CONFIG = "DELETE_GUILD_CONFIG";
 export const deleteGuildConfig = guild_id => ({
-  type: DELETE_GUILD_CONFIG,
-  guild_id
+    type: DELETE_GUILD_CONFIG,
+    guild_id
 });

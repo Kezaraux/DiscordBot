@@ -1,0 +1,9 @@
+{
+  "error_no_db_entry": "Could not find the requested item in the database",
+  "error_item_not_found": "Could not find the specified %s",
+  "error_role_deleted": "Role associated with %s appears to have been deleted",
+  "error_reaction_not_found": "Reaction could not be found on message, were they all removed",
+  "error_user_not_in_guild": "Attempted to grab user %s but they were not found in the guild %s",
+  "db_remove_item": "Removing %s of id %s from database",
+  "reaction_message_deleted": "Removed the reaction message and all associated reaction roles"
+}
