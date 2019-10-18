@@ -37,6 +37,9 @@ export let removeReactMessage;
 
 export let addReactionRole;
 export let getReactionRole;
+export let getReactionRoleById;
+export let getReactionRoleByMessageAndIdentifier;
+export let getReactionRoleByMessageAndRole;
 export let getReactionRolesForMessage;
 export let removeReactionRole;
 export let getAllReactionRoles;
@@ -83,6 +86,13 @@ if (config.get("features.reactRoles")) {
         "INSERT OR REPLACE INTO reaction_roles (id, react_message_id, reaction_identifier, role_id) values (@id, @react_message_id, @reaction_identifier, @role_id);"
     );
     getReactionRole = sql.prepare(
+        "SELECT * FROM reaction_roles WHERE react_message_id = ? AND reaction_identifier = ?"
+    );
+    getReactionRoleById = sql.prepare("SELECT * FROM reaction_roles WHERE id = ?");
+    getReactionRoleByMessageAndRole = sql.prepare(
+        "SELECT * FROM reaction_roles WHERE react_message_id = ? AND role_id = ?"
+    );
+    getReactionRoleByMessageAndIdentifier = sql.prepare(
         "SELECT * FROM reaction_roles WHERE react_message_id = ? AND reaction_identifier = ?"
     );
     getReactionRolesForMessage = sql.prepare("SELECT * FROM reaction_roles WHERE react_message_id = ?");

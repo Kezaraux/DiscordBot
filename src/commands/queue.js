@@ -3,10 +3,12 @@ import config from "config";
 import md5 from "md5";
 import { RichEmbed } from "discord.js";
 import ytdl from "ytdl-core";
+import { sprintf } from "sprintf-js";
 
 import log from "../utils/logger";
 import { addSong, removeSong, clearQueue } from "../actions";
 import { getSongQueue } from "../selectors";
+import ResourceStrings from "../utils/ResourceStrings.json";
 
 const command = "queue";
 const aliases = [command, "q"];
@@ -30,13 +32,13 @@ class QueueCommand extends Command {
                 const builtSong = await constructSong(args.song);
                 return builtSong
                     ? message.channel.send(queueSong(builtSong, this.client.store))
-                    : message.channel.send("Please provide a proper URL!");
+                    : message.channel.send(sprintf(ResourceStrings.error_item_not_valid, "URL"));
             case "remove":
                 return message.channel.send(removeSongFromQueue(constructSong(args.song, this.client.store)));
             case "clear":
                 return message.channel.send(clearSongQueue(this.client.store));
             default:
-                return message.channel.send("I didn't understand that sub command!");
+                return message.channel.send(ResourceStrings.unknown_sub_cmd);
         }
     }
 }
@@ -59,28 +61,28 @@ const constructSong = async song => {
 
 const queueSong = (song, store) => {
     store.dispatch(addSong(song));
-    return "Your song has been added to the queue!";
+    return ResourceStrings.song_added;
 };
 
 const removeSongFromQueue = (song, store) => {
     if (song) {
         store.dispatch(removeSong(song.id));
-        return "All instances of that song have been removed from the queue!";
+        return ResourceStrings.song_removed;
     } else {
-        return "Please provide a proper URL!";
+        return sprintf(ResourceStrings.error_item_not_valid, "URL");
     }
 };
 
 const clearSongQueue = store => {
     store.dispatch(clearQueue);
-    return "The song queue has been cleared!";
+    return ResourceStrings.queue_cleared;
 };
 
 const constructQueueMessage = store => {
     const queue = getSongQueue(store.getState());
-    const queueEmbed = new RichEmbed().setTitle("Current song queue").setColor("GREEN");
+    const queueEmbed = new RichEmbed().setTitle(ResourceStrings.current_queue).setColor("GREEN");
     if (!queue.length) {
-        return queueEmbed.addField("Nothing", "We're out of songs!");
+        return queueEmbed.addField(ResourceStrings.nothing, ResourceStrings.out_of_songs);
     }
     queue.forEach((song, i) => {
         queueEmbed.addField(`${i + 1}) ${song.title}`, `${song.url}`);

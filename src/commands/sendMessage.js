@@ -1,7 +1,9 @@
 import { Command } from "discord-akairo";
 import config from "config";
+import { sprintf } from "sprintf-js";
 
 import log from "../utils/logger";
+import ResourceStrings from "../utils/ResourceStrings.json";
 
 const command = "message";
 const aliases = [command, "msg", "m"];
@@ -22,7 +24,7 @@ class MessageCommand extends Command {
         const channel = message.guild.channels.find(c => c.id === args.channel);
         return channel
             ? channel.send(args.message)
-            : message.channel.send("I couldn't find that channel! Make sure you put in the channel ID!");
+            : message.channel.send(sprintf(ResourceStrings.error_item_not_found_params, "channel"));
     }
 }
 

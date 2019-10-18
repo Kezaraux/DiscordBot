@@ -3,6 +3,7 @@ import config from "config";
 
 import log from "../utils/logger";
 import { getGuildConfig } from "../selectors";
+import ResourceStrings from "../utils/ResourceStrings.json";
 
 const command = "shutdown";
 const aliases = [command, "sd"];
@@ -20,16 +21,16 @@ class ShutdownCommand extends Command {
     userPermissions(message) {
         const guildConfig = getGuildConfig(this.client.store.getState(), message.guild.id);
         return (
-            message.member.roles.exists(role => role.name === guildConfig.adminRole) ||
-            message.author.id === config.get("private.ownerId")
+            message.member.roles.find(r => r.name === guildConfig.adminRole) ||
+            message.author.id === guildConfig.ownerId
         );
     }
 
     exec(message) {
-        log("Shutdown command recieved");
-        return message.channel.send("Going to shut down!").then(() => {
+        log(ResourceStrings.shutting_down);
+        return message.channel.send(ResourceStrings.shutting_down).then(() => {
             this.client.destroy();
-            log("Bot has shut down.");
+            log(ResourceStrings.bot_offline);
             process.exit();
         });
     }

@@ -76,7 +76,7 @@ class RemoveReactionCommand extends Command {
         }
 
         removeReactMessage.run(dbReactMessage.id);
-        log(`${ResourceStrings.reaction_message_deleted}. Reaction message of id ${dbReactMessage.id}`);
+        log(`${ResourceStrings.reaction_message_deleted} Reaction message of id ${dbReactMessage.id}`);
 
         return message.channel.send(ResourceStrings.reaction_message_deleted);
     }

@@ -1,10 +1,12 @@
 import { Command } from "discord-akairo";
 import { RichEmbed } from "discord.js";
 import config from "config";
+import { sprintf } from "sprintf-js";
 
 import log from "../utils/logger";
 import { getGuildConfig } from "../selectors";
 import { updateGuildConfig } from "../actions";
+import ResourceStrings from "../utils/ResourceStrings.json";
 
 const configKeys = Object.keys(require("../../config/initialDbConfig.json"));
 
@@ -27,7 +29,7 @@ class ConfigCommand extends Command {
                                 this.client.store.getState(),
                                 message.guild.id
                             );
-                            const content = "Select config option to update from the current config options";
+                            const content = ResourceStrings.select_config_option;
                             const embed = new RichEmbed()
                                 .setTitle(`Config for ${message.guild.name}`)
                                 .setColor("WHITE");
@@ -36,13 +38,13 @@ class ConfigCommand extends Command {
                             }
                             return { embed, content };
                         },
-                        retry: "That wasn't a config option, please choose a valid option!"
+                        retry: ResourceStrings.error_invalid_option_retry
                     }
                 },
                 {
                     id: "value",
                     type: "string",
-                    prompt: { start: "Please enter the new value." }
+                    prompt: { start: ResourceStrings.prompt_value }
                 }
             ],
             channelRestriction: "guild"
@@ -53,8 +55,8 @@ class ConfigCommand extends Command {
     userPermissions(message) {
         const guildConfig = getGuildConfig(this.client.store.getState(), message.guild.id);
         return (
-            message.member.roles.exists(role => role.name === guildConfig.adminRole) ||
-            message.author.id === config.get("private.ownerId")
+            message.member.roles.find(r => r.name === guildConfig.adminRole) ||
+            message.author.id === guildConfig.ownerId
         );
     }
 
@@ -68,8 +70,10 @@ class ConfigCommand extends Command {
                 config: newConfig
             })
         );
-        log(`Updated the config for guild ${message.guild.id} to ${args.prefix}`);
-        return message.channel.send(`I've updated the config for ${args.option} to be ${args.value}`);
+        log(sprintf(ResourceStrings.updated_config_option, args.option, args.value, message.guild.id));
+        return message.channel.send(
+            sprintf(ResourceStrings.updated_config_option, args.option, args.value, message.guild.id)
+        );
     }
 }
 

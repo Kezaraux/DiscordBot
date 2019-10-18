@@ -25,7 +25,10 @@ class MessageReactionRemoveListener extends Listener {
         msgReact.message.guild
             .fetchMember(user)
             .then(mem => mem.removeRole(reactionRole.role_id))
-            .catch(console.error);
+            .catch(e => {
+                msgReact.message.channel.send(ResourceStrings.error_missing_permissions);
+                logObj("Failed to apply role, error:", e);
+            });
     }
 }
 

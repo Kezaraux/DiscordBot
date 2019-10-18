@@ -1,12 +1,14 @@
 import { Command } from "discord-akairo";
 import { RichEmbed } from "discord.js";
 import config from "config";
+import { sprintf } from "sprintf-js";
 const fs = require("fs");
 const { promisify } = require("util");
 const readdir = promisify(fs.readdir);
 
 import log, { logObj } from "../utils/logger";
 import { getGuildConfig } from "../selectors";
+import ResourceStrings from "../utils/ResourceStrings.json";
 
 const command = "help";
 const aliases = [command];
@@ -38,25 +40,23 @@ class HelpCommand extends Command {
         const cmdData = await getAllCommands();
         const helpEmbed = new RichEmbed();
         helpEmbed.setColor("WHITE");
-        helpEmbed.setFooter(
-            "Square brackets denote an optional argument. Triangle brackets denote a required argument."
-        );
+        helpEmbed.setFooter(ResourceStrings.bracket_info);
         // If the user tried to specify a command for help
         if (args.cmd) {
             const cmd = cmdData.find(cmd => cmd.aliases.includes(args.cmd));
             if (cmd === undefined) {
-                return message.channel.send("That command doesn't exist!");
+                return message.channel.send(ResourceStrings.error_command_dne);
             } else {
-                helpEmbed.setTitle(`Information for ${args.cmd}`);
-                helpEmbed.addField("Usage", `${guildConfig.prefix}${cmd.usage}`);
+                helpEmbed.setTitle(sprintf(ResourceStrings.information_for, cmd.identifier));
+                helpEmbed.addField(ResourceStrings.usage, `${guildConfig.prefix}${cmd.usage}`);
                 const aliases = cmd.aliases.filter(a => a !== cmd.identifier);
                 aliases.length > 0
                     ? helpEmbed.addField(
-                          `You can use the following instead of ${cmd.identifier}`,
+                          sprintf(ResourceStrings.use_following_instead, cmd.identifier),
                           aliases.join(", ")
                       )
                     : null;
-                helpEmbed.addField("Info", cmd.blurb);
+                helpEmbed.addField(ResourceStrings.info, cmd.blurb);
                 return message.channel.send(helpEmbed);
             }
         }
@@ -71,27 +71,27 @@ class HelpCommand extends Command {
             return result;
         }, {});
 
-        helpEmbed.setTitle("List of commands by category");
+        helpEmbed.setTitle(ResourceStrings.commands_by_cat);
         Object.keys(cmdObject).forEach(key => {
             if (key === "admin" && !hasAdminRole) {
                 return;
             }
             helpEmbed.addField(
-                `${key} category:`,
+                sprintf(ResourceStrings.some_cat, key),
                 cmdObject[key].join(", ") +
                     (hasAdminRole && key === "admin"
-                        ? `\nThese commands require you to have the \`${guildConfig.adminRole}\` role\nEnsure this role exists on your server, or update the config to change the role`
+                        ? sprintf(ResourceStrings.command_needs_admin, guildConfig.adminRole)
                         : "")
             );
         });
         helpEmbed.addField(
-            "For more information on a command",
-            `Use ${guildConfig.prefix}help [command]\nIf you know an alias for a command those will work as well`
+            ResourceStrings.more_command_info,
+            sprintf(ResourceStrings.more_info_blurb, guildConfig.prefix)
         );
         if (!hasAdminRole) {
             helpEmbed.addField(
-                "Other information",
-                `Admin commands will not be listed unless you have the role \`${guildConfig.adminRole}\``
+                ResourceStrings.other_information,
+                sprintf(ResourceStrings.admin_cmds_not_listed, guildConfig.adminRole)
             );
         }
 

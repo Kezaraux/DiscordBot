@@ -15,6 +15,7 @@ class ErrorListener extends Listener {
     }
 
     exec(e) {
+        log("ERROR");
         console.error(e);
     }
 }

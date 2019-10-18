@@ -1,9 +1,11 @@
 import { Command } from "discord-akairo";
 import config from "config";
+import { sprintf } from "sprintf-js";
 
 import log from "../utils/logger";
 import { getGuildConfig } from "../selectors";
 import { updateGuildConfig } from "../actions";
+import ResourceStrings from "../utils/ResourceStrings.json";
 
 const command = "prefix";
 const aliases = [command, "pre"];
@@ -22,14 +24,14 @@ class PrefixCommand extends Command {
     userPermissions(message) {
         const guildConfig = getGuildConfig(this.client.store.getState(), message.guild.id);
         return (
-            message.member.roles.exists(role => role.name === guildConfig.adminRole) ||
-            message.author.id === config.get("private.ownerId")
+            message.member.roles.find(r => r.name === guildConfig.adminRole) ||
+            message.author.id === guildConfig.ownerId
         );
     }
 
     exec(message, args) {
         if (!args.prefix) {
-            return message.channel.send("Please provide a new prefix to change to!");
+            return message.channel.send(ResourceStrings.provide_new_prefix);
         }
         const oldConfig = getGuildConfig(this.client.store.getState(), message.guild.id);
         const newConfig = { ...oldConfig, prefix: args.prefix };
@@ -39,8 +41,8 @@ class PrefixCommand extends Command {
                 config: newConfig
             })
         );
-        log(`Updated the prefix for guild ${message.guild.id} to ${args.prefix}`);
-        return message.channel.send(`Changed the prefix for this server to ${args.prefix}`);
+        log(sprintf(ResourceStrings.updated_prefix, message.guild.id, args.prefix));
+        return message.channel.send(sprintf(ResourceStrings.changed_prefix, args.prefix));
     }
 }
 

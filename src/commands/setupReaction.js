@@ -1,8 +1,10 @@
 import { Command } from "discord-akairo";
 import config from "config";
+import { sprintf } from "sprintf-js";
 
 import log from "../utils/logger";
 import { addReactMessage } from "../utils/database";
+import ResourceStrings from "../utils/ResourceStrings";
 
 const command = "setupReaction";
 const aliases = [command, "setupReact", "setR", "sr", "doReact"];
@@ -21,11 +23,11 @@ class SetupReactionCommand extends Command {
     async exec(message, args) {
         const channel = message.guild.channels.find(c => c.id === args.channel);
         if (!channel) {
-            return message.channel.send("I couldn't find the channel you specified!");
+            return message.channel.send(sprintf(ResourceStrings.error_item_not_found_params, "channel"));
         }
         const toBeReactMessage = await channel.fetchMessage(args.messageId);
         if (!toBeReactMessage) {
-            return message.channel.send("I couldn't find the message you specified!");
+            return message.channel.send(sprintf(ResourceStrings.error_item_not_found_params), "message");
         }
 
         const data = {
@@ -36,8 +38,8 @@ class SetupReactionCommand extends Command {
         };
 
         addReactMessage.run(data);
-        log("Added reaction message to database");
-        return message.channel.send("The message has been added as a reaction message!");
+        log(ResourceStrings.db_added_reaction_msg);
+        return message.channel.send(ResourceStrings.reaction_message_added);
     }
 }
 

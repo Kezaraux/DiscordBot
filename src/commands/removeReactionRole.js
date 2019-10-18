@@ -1,8 +1,10 @@
 import { Command } from "discord-akairo";
 import config from "config";
+import { sprintf } from "sprintf-js";
 
 import log from "../utils/logger";
 import { getReactMessage, getReactionRole, removeReactionRole } from "../utils/database";
+import ResourceStrings from "../utils/ResourceStrings.json";
 
 const command = "removeReactionRole";
 const aliases = [command, "rrr"];
@@ -22,35 +24,35 @@ class RemoveReactionRoleCommand extends Command {
         // Get the reaction message from DB
         const messageObj = getReactMessage.get(args.message, message.guild.id);
         if (!messageObj) {
-            return message.channel.send("Are you sure you gave the correct message ID?");
+            return message.channel.send(sprintf(ResourceStrings.error_item_not_found_params, "message"));
         }
 
         // Get the channel the message is located in
         const channel = message.guild.channels.find(c => c.id === messageObj.channel);
         if (!channel) {
-            return message.channel.send(
-                "Didn't find the channel for the message, this should never happen unless the channel was deleted."
-            );
+            return message.channel.send(sprintf(ResourceStrings.error_item_not_found_deleted, "channel"));
         }
 
         // Ensure the reaction message is cached by the bot so we can work with it
         const reactMsg = await channel.fetchMessage(messageObj.message).catch(console.error);
         if (!reactMsg) {
-            return message.channel.send("Did not find the message in the channel. Was it deleted?");
+            return message.channel.send(sprintf(ResourceStrings.error_item_not_found_deleted, "message"));
         }
 
         // Get the reaction role that we want to work with
         const reactRole = getReactionRole.get(messageObj.message, args.reaction);
         if (!reactRole) {
             return message.channel.send(
-                `Couldn't find the react role with the ${args.reaction} for the message.`
+                sprintf(ResourceStrings.error_reaction_role_not_found, args.reaction)
             );
         }
 
         // Get the actual role on the guild side of things
         const role = message.guild.roles.find(r => r.id === reactRole.role_id);
         if (!role) {
-            return message.channel.send("We couldn't find the role for the react message, was it deleted?");
+            return message.channel.send(
+                sprintf(ResourceStrings.error_item_not_found_deleted, "role for react message")
+            );
         }
 
         // Remove all reactions from the message
@@ -58,17 +60,17 @@ class RemoveReactionRoleCommand extends Command {
         const reactionOnMessage = reactMsg.reactions.find(
             r => r.emoji.name === reactRole.reaction_identifier
         );
-        log("About to attempt to remove reactions, ignore warnings");
+        log(ResourceStrings.warn_removing_reactions);
         reactionOnMessage.users.forEach(async u => {
             reactionOnMessage.remove(u);
             const guildMem = await message.guild.fetchMember(u);
             !guildMem
-                ? log("Tried to grab a user to remove role, couldn't find them.")
+                ? log(sprintf(ResourceStrings.error_item_not_found, "user"))
                 : guildMem.removeRole(role);
         });
 
         removeReactionRole.run(`${message.guild.id}-${role.id}`);
-        return message.channel.send(`${args.reaction} has been removed from the specified message.`);
+        return message.channel.send(sprintf(ResourceStrings.reaction_role_removed, args.reaction));
     }
 }
 
