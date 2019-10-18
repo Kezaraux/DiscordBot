@@ -5,19 +5,21 @@ import log from "../utils/logger";
 import { getGuildConfig } from "../selectors";
 import ResourceStrings from "../utils/ResourceStrings.json";
 
+const event = "commandBlocked";
+
 class CommandBlockedListener extends Listener {
     constructor() {
-        super("commandBlocked", {
+        super(event, {
             emitter: "commandHandler",
-            eventName: "commandBlocked"
+            eventName: event
         });
 
-        log("CommandBlockedListener created");
+        log(`${event}Listener created`);
     }
 
     exec(message, command, reason) {
         const guildConfig = getGuildConfig(this.client.store.getState(), message.guild.id);
-        log(`${message.author.username} was blocked from using ${command.id}.\nReason: ${reason}`);
+        log(sprintf(ResourceStrings.warn_command_blocked, message.author.username, command.id, reason));
         message.channel.send(sprintf(ResourceStrings.error_user_permissions, command, guildConfig.adminRole));
     }
 }

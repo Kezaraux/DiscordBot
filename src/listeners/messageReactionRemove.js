@@ -3,23 +3,21 @@ import { Listener } from "discord-akairo";
 import log from "../utils/logger";
 import { getReactionRole } from "../utils/database";
 
+const event = "messageReactionRemove";
 class MessageReactionRemoveListener extends Listener {
     constructor() {
-        super("messageReactionRemove", {
+        super(event, {
             emitter: "client",
-            eventName: "messageReactionRemove"
+            eventName: event
         });
 
-        log("MessageReactionRemoveListener created");
+        log(`${event}Listener created`);
     }
 
     exec(msgReact, user) {
         const reactionRole = getReactionRole.get(msgReact.message.id, msgReact.emoji.name);
         if (!reactionRole) {
-            log(
-                "Message not found in DB OR emoji isn't established for message in DB" +
-                    "\n\tBot could have deleted a reaction role and is removing reactions."
-            );
+            log(ResourceStrings.error_react_msg_or_emoji + ResourceStrings.warn_bot_removing_reactions);
             return;
         }
         msgReact.message.guild
@@ -27,7 +25,7 @@ class MessageReactionRemoveListener extends Listener {
             .then(mem => mem.removeRole(reactionRole.role_id))
             .catch(e => {
                 msgReact.message.channel.send(ResourceStrings.error_missing_permissions);
-                logObj("Failed to apply role, error:", e);
+                logObj(ResourceStrings.error_failed_to_apply_role, e);
             });
     }
 }

@@ -4,14 +4,16 @@ import log, { logObj } from "../utils/logger";
 import { getReactionRole } from "../utils/database";
 import ResourceStrings from "../utils/ResourceStrings.json";
 
+const event = "messageReactionAdd";
+
 class MessageReactionAddListener extends Listener {
     constructor() {
-        super("messageReactionAdd", {
+        super(event, {
             emitter: "client",
-            eventName: "messageReactionAdd"
+            eventName: event
         });
 
-        log("MessageReactionAddListener created");
+        log(`${event}Listener created`);
     }
 
     exec(msgReact, user) {
@@ -20,8 +22,8 @@ class MessageReactionAddListener extends Listener {
         }
         const reactionRole = getReactionRole.get(msgReact.message.id, msgReact.emoji.name);
         if (!reactionRole) {
-            log("Message not found in DB OR emoji isn't established for message in DB");
-            logObj("Emoji not found is:", msgReact.emoji);
+            log(ResourceStrings.error_react_msg_or_emoji);
+            logObj(ResourceStrings.emoji_not_found_is, msgReact.emoji);
             return;
         }
         msgReact.message.guild
@@ -29,7 +31,7 @@ class MessageReactionAddListener extends Listener {
             .then(mem => mem.addRole(reactionRole.role_id))
             .catch(e => {
                 msgReact.message.channel.send(ResourceStrings.error_missing_permissions);
-                logObj("Failed to apply role, error:", e);
+                logObj(ResourceStrings.error_failed_to_apply_role, e);
             });
     }
 }

@@ -1,17 +1,20 @@
 import { Listener } from "discord-akairo";
-import config from "config";
+import { sprintf } from "sprintf-js";
 
 import log from "../utils/logger";
 import { getGuildConfig } from "../selectors";
+import ResourceStrings from "../utils/ResourceStrings.json";
+
+const event = "guildMemberAdd";
 
 class GuildMemberAddListener extends Listener {
     constructor() {
-        super("guildMemberAdd", {
+        super(event, {
             emitter: "client",
-            eventName: "guildMemberAdd"
+            eventName: event
         });
 
-        log("GuildMemberAddListener created");
+        log(`${event}Listener created`);
     }
 
     exec(member) {
@@ -26,7 +29,13 @@ class GuildMemberAddListener extends Listener {
             const inviter = this.client.users.get(invite.inviter.id);
             const logChannel = member.guild.channels.find(channel => channel.name === newJoinLogChannel);
             logChannel.send(
-                `${member.user.tag} joined using invite code ${invite.code} from ${inviter.tag}.\nInvite was used ${invite.uses} times since its creation.`
+                sprintf(
+                    ResourceStrings.info_member_joined,
+                    member.user.tag,
+                    invite.code,
+                    inviter.tag,
+                    invite.uses
+                )
             );
         });
     }

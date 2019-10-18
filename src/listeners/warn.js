@@ -17,9 +17,6 @@ class WarnListener extends Listener {
     exec(e) {
         log("WARN");
         console.warn(e);
-        if (e.code === 50013) {
-            log("SOMETHING");
-        }
     }
 }
 
