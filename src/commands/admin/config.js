@@ -3,12 +3,12 @@ import { RichEmbed } from "discord.js";
 import config from "config";
 import { sprintf } from "sprintf-js";
 
-import log from "../utils/logger";
-import { getGuildConfig } from "../selectors";
-import { updateGuildConfig } from "../actions";
-import ResourceStrings from "../utils/ResourceStrings.json";
+import log from "../../utils/logger";
+import { getGuildConfig } from "../../selectors";
+import { updateGuildConfig } from "../../actions";
+import ResourceStrings from "../../utils/ResourceStrings.json";
 
-const configKeys = Object.keys(require("../../config/initialDbConfig.json"));
+const configKeys = Object.keys(require("../../../config/initialDbConfig.json"));
 
 const command = "config";
 const aliases = [command, "conf"];

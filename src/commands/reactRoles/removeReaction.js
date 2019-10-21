@@ -2,14 +2,14 @@ import { Command } from "discord-akairo";
 import config from "config";
 import { sprintf } from "sprintf-js";
 
-import log, { logObj } from "../utils/logger";
+import log, { logObj } from "../../utils/logger";
 import {
     getReactMessage,
     getReactionRolesForMessage,
     removeReactMessage,
     removeReactionRole
-} from "../utils/database";
-import ResourceStrings from "../utils/ResourceStrings.json";
+} from "../../utils/database";
+import ResourceStrings from "../../utils/ResourceStrings.json";
 
 const command = "removeReaction";
 const aliases = [command, "removeReact", "remR", "rr", "delReact"];

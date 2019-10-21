@@ -1,7 +1,7 @@
 import { Command } from "discord-akairo";
 import config from "config";
 
-import log, { logObj } from "../utils/logger";
+import log, { logObj } from "../../utils/logger";
 
 const command = "state";
 const aliases = [command, "s"];

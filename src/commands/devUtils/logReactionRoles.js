@@ -2,8 +2,8 @@ import { Command } from "discord-akairo";
 import { RichEmbed } from "discord.js";
 import config from "config";
 
-import log, { logObj } from "../utils/logger";
-import { getAllReactionRoles } from "../utils/database";
+import log, { logObj } from "../../utils/logger";
+import { getAllReactionRoles } from "../../utils/database";
 
 const command = "logRoleTable";
 const aliases = [command, "lrt"];

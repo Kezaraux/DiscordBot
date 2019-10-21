@@ -2,14 +2,14 @@ import { Command } from "discord-akairo";
 import config from "config";
 import { sprintf } from "sprintf-js";
 
-import log from "../utils/logger";
+import log from "../../utils/logger";
 import {
     getReactMessage,
     addReactionRole,
     getReactionRoleByMessageAndRole,
     getReactionRoleByMessageAndIdentifier
-} from "../utils/database";
-import ResourceStrings from "../utils/ResourceStrings.json";
+} from "../../utils/database";
+import ResourceStrings from "../../utils/ResourceStrings.json";
 
 const command = "addReactionRole";
 const aliases = [command, "arr"];
