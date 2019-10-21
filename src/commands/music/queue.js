@@ -3,11 +3,11 @@ import config from "config";
 import { RichEmbed } from "discord.js";
 import { sprintf } from "sprintf-js";
 
-import log from "../utils/logger";
-import { addSong, removeSong, clearQueue } from "../actions";
-import { getSongQueue } from "../selectors";
-import ResourceStrings from "../utils/ResourceStrings.json";
-import { constructSong, queueSong } from "../utils/music-helpers";
+import log from "../../utils/logger";
+import { addSong, removeSong, clearQueue } from "../../actions";
+import { getSongQueue } from "../../selectors";
+import ResourceStrings from "../../utils/ResourceStrings.json";
+import { constructSong, queueSong } from "../../utils/music-helpers";
 
 const command = "queue";
 const aliases = [command, "q"];

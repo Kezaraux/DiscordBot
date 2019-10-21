@@ -2,9 +2,9 @@ import { Command } from "discord-akairo";
 import config from "config";
 import { sprintf } from "sprintf-js";
 
-import log from "../utils/logger";
-import { constructSong, queueSong } from "../utils/music-helpers";
-import { joinVoiceChannel } from "../utils/discord-helpers"
+import log from "../../utils/logger";
+import { constructSong, queueSong } from "../../utils/music-helpers";
+import { joinVoiceChannel } from "../../utils/discord-helpers";
 
 const command = "play";
 const aliases = [command, "p"];
@@ -21,17 +21,18 @@ class PlayCommand extends Command {
     }
 
     async exec(message, args) {
-        if (args.song) {  // Queue the song                 
+        if (args.song) {
+            // Queue the song
             const builtSong = await constructSong(args.song);
             if (builtSong) {
-                message.channel.send(queueSong(builtSong, this.client.store))
+                message.channel.send(queueSong(builtSong, this.client.store));
             } else {
                 return message.channel.send(sprintf(ResourceStrings.error_item_not_valid, "URL"));
             }
         }
 
         // Start playing the queue
-        return message.channel.send(await joinVoiceChannel(message, this.client.store, this.client.user));
+        return message.channel.send(await joinVoiceChannel(message, this.client.store));
     }
 }
 

@@ -1,9 +1,9 @@
 import { Command } from "discord-akairo";
 import config from "config";
 
-import log from "../utils/logger";
-import { getGuildConfig } from "../selectors";
-import ResourceStrings from "../utils/ResourceStrings.json";
+import log from "../../utils/logger";
+import { getGuildConfig } from "../../selectors";
+import ResourceStrings from "../../utils/ResourceStrings.json";
 
 const command = "shutdown";
 const aliases = [command, "sd"];

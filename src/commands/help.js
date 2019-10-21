@@ -2,9 +2,10 @@ import { Command } from "discord-akairo";
 import { RichEmbed } from "discord.js";
 import config from "config";
 import { sprintf } from "sprintf-js";
-const fs = require("fs");
-const { promisify } = require("util");
-const readdir = promisify(fs.readdir);
+const glob = require("glob-fs")({ gitignore: true });
+// const fs = require("fs");
+// const { promisify } = require("util");
+// const readdir = promisify(fs.readdir);
 
 import log, { logObj } from "../utils/logger";
 import { getGuildConfig } from "../selectors";
@@ -100,7 +101,8 @@ class HelpCommand extends Command {
 }
 
 const getAllCommands = async () => {
-    const files = await readdir("./src/commands/");
+    // const files = await readdir("./src/commands/");
+    const files = glob.readdirSync("./src/commands/**/*.js");
     let cmdFiles = files.filter(f => f.split(".").pop() === "js");
     if (cmdFiles.length === 0) {
         log("No commands to load! That's impossible!");
@@ -109,10 +111,9 @@ const getAllCommands = async () => {
 
     let cmdList = [];
     cmdFiles.forEach(file => {
-        const help = require(`./${file}`).help;
+        const help = require(`./${file.substring("src/commands/".length)}`).help;
         cmdList.push(help);
     });
-
     return cmdList;
 };
 

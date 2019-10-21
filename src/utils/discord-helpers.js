@@ -1,7 +1,8 @@
 import long from "long";
 
 import { permissions } from "./constants";
-import { getVoiceConnection } from "../selectors";
+import { getVoiceChannel, getSongDispatcher } from "../selectors";
+import { setVoiceChannel, setVoiceConnection, setSongDispatcher } from "../actions";
 import ResourceStrings from "./ResourceStrings.json";
 
 export const getDefaultChannel = guild => {
@@ -41,15 +42,15 @@ export const hasPermissionFor = (channel, roleOrMem, perm) => channel.permission
 
 export const isUserInVoiceChannel = msg => {
     return Boolean(msg.member.voiceChannel);
-}
+};
 
 export const isBotInVoiceChannel = store => {
     return Boolean(getVoiceConnection(store.getState()));
-}
+};
 
-export const joinVoiceChannel = async (msg, store, user) => {
-    if (getVoiceConnection(store.getState())) {
-        return ResourceStrings.error_already_in_voice
+export const joinVoiceChannel = async (msg, store) => {
+    if (getVoiceChannel(store.getState())) {
+        return ResourceStrings.error_already_in_voice;
     }
 
     const vc = msg.member.voiceChannel;
@@ -57,13 +58,33 @@ export const joinVoiceChannel = async (msg, store, user) => {
         return ResourceStrings.error_not_in_voice;
     }
 
-    const botGuildMem = await msg.guild.fetchMember(user);
-    const thing = msg.client.user;
-    const perms = vc.permissionsFor(thing);
+    const botGuildMem = msg.guild.me;
+    const perms = vc.permissionsFor(botGuildMem);
     if (!perms.has(permissions.CONNECT) || !perms.has(permissions.SPEAK)) {
         console.log("THIS IS HAPPENING");
         return ResourceStrings.error_perms_to_join_and_speak;
     }
 
-    return "Boop";
-}
+    const connection = await vc.join();
+    store.dispatch(setVoiceConnection(connection));
+    store.dispatch(setVoiceChannel(vc));
+    return `I'm joining the voice channel ${vc.name} for you, ${msg.author.username}`;
+};
+
+export const leaveVoiceChannel = (msg, store) => {
+    const vc = getVoiceChannel(store.getState());
+    if (!vc) {
+        return ResourceStrings.error_not_in_voice_bot;
+    }
+
+    const dispatcher = getSongDispatcher(store.getState());
+    if (dispatcher) {
+        dispatcher.end();
+        store.dispatch(setSongDispatcher(undefined));
+    }
+    store.dispatch(setVoiceChannel(undefined));
+    store.dispatch(setVoiceConnection(undefined));
+
+    vc.leave();
+    return `I'm leaving the voice channel ${vc.name}, ${msg.author.username}`;
+};
