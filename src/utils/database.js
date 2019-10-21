@@ -23,10 +23,10 @@ if (config.get("features.score")) {
         sql.pragma("journal_mode = wal");
         log("\tScore table established");
     }
-    getScore = sql.prepare(
+    setScore = sql.prepare(
         "INSERT OR REPLACE INTO scores (id, user, guild, points, level) values (@id, @user, @guild, @points, @level);"
     );
-    setScore = sql.prepare("SELECT * FROM scores WHERE user = ? AND guild = ?");
+    getScore = sql.prepare("SELECT * FROM scores WHERE user = ? AND guild = ?");
     log("\tScore database usage statements ready");
 }
 

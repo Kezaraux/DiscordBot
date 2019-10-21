@@ -4,7 +4,7 @@ import config from "config";
 import log from "../utils/logger";
 
 const command = "ping";
-const aliases = [command, "p"];
+const aliases = [command];
 const category = "default";
 
 class PingCommand extends Command {

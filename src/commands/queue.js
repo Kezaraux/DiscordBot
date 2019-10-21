@@ -1,14 +1,13 @@
 import { Command } from "discord-akairo";
 import config from "config";
-import md5 from "md5";
 import { RichEmbed } from "discord.js";
-import ytdl from "ytdl-core";
 import { sprintf } from "sprintf-js";
 
 import log from "../utils/logger";
 import { addSong, removeSong, clearQueue } from "../actions";
 import { getSongQueue } from "../selectors";
 import ResourceStrings from "../utils/ResourceStrings.json";
+import { constructSong, queueSong } from "../utils/music-helpers";
 
 const command = "queue";
 const aliases = [command, "q"];
@@ -18,6 +17,7 @@ class QueueCommand extends Command {
     constructor() {
         super(command, {
             aliases,
+            category,
             args: [{ id: "cmd", type: "string", default: "list" }, { id: "song", type: "string" }]
         });
         log(`${command}Command created`);
@@ -44,26 +44,6 @@ class QueueCommand extends Command {
 }
 
 //Queue command utils
-const youtubeRegex = /^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.?be)\/.+$/;
-
-const constructSong = async song => {
-    if (!youtubeRegex.test(song)) {
-        return undefined;
-    }
-    const songInfo = await ytdl.getBasicInfo(song);
-    const hash = md5(song);
-    return {
-        url: song,
-        id: hash,
-        title: songInfo.title
-    };
-};
-
-const queueSong = (song, store) => {
-    store.dispatch(addSong(song));
-    return ResourceStrings.song_added;
-};
-
 const removeSongFromQueue = (song, store) => {
     if (song) {
         store.dispatch(removeSong(song.id));
