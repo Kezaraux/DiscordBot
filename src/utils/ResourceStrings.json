@@ -19,9 +19,13 @@
     "error_react_msg_or_emoji": "Message not found in DB OR emoji isn't established for message in DB",
     "error_failed_to_apply_role": "Failed to apply role, error:",
     "error_guild_for_react_msg": "\tGuild for a react message wasn't found. Was I removed from it?",
+    "error_no_recruit_role_found": "The minimum role to use the recruit command was not found on this server. Update the config or create the role accordingly!",
+    "error_no_member_role_found": "The member role from the config wasn't found on this server! Update the config or create the role accordingly!",
+    "error_need_to_mention_user": "You need to mention a user to use this command!",
     "warn_bot_removing_reactions": "\n\tBot could have deleted a reaction role and is removing reactions.",
     "warn_command_blocked": "%s was blocked from using %s.\nReason: %s",
     "warn_removing_reactions": "About to attempt to remove reactions, ignore warnings",
+    "warn_need_recruit_role": "Sorry, you need the %s role or higher to use this command!",
     "info_joined_guild": "Bot has joined guild: %s",
     "info_config_created": "Config created for guild %s",
     "info_left_guild": "Bot has left guild: %s",
@@ -71,5 +75,6 @@
     "other_information": "Other information",
     "provide_new_prefix": "Please provide a new prefix to change to!",
     "updated_prefix": "Updated the prefix for guild %s to %s",
-    "changed_prefix": "Changed the prefix for this server to %s"
+    "changed_prefix": "Changed the prefix for this server to %s",
+    "member_role_added": "I've added the member role %s to %s, welcome!"
 }

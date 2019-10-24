@@ -1,6 +1,9 @@
 {
-  "prefix": "!",
-  "ownerId": "128762363166982144",
-  "newJoinLogChannel": "new-members",
-  "adminRole": "Administrator"
+    "prefix": "!",
+    "ownerId": "128762363166982144",
+    "newJoinLogChannel": "new-members",
+    "adminRole": "Administrator",
+    "recruiterMin": "Recruiter",
+    "memberRole": "Member",
+    "newRecruitChannel": "general"
 }

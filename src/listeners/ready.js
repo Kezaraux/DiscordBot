@@ -1,8 +1,9 @@
 import { Listener } from "discord-akairo";
 import config from "config";
 import { sprintf } from "sprintf-js";
+import { merge } from "lodash";
 
-import log from "../utils/logger";
+import log, { logObj } from "../utils/logger";
 import { getAllReactMessages, getGuildConfig, saveGuildConfig } from "../utils/database";
 import { loadGuildConfigs } from "../actions";
 import ResourceStrings from "../utils/ResourceStrings.json";

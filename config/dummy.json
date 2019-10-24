@@ -1,21 +1,22 @@
 {
-  "private": {
-    "botKey": "YOUR BOT KEY HERE",
-    "ownerId": "YOUR DISCORD ID HERE"
-  },
-  "setup": {
-    "guildId": "YOUR GUILD ID HERE"
-  },
-  "bot": {
-    "blacklistedUsers": [""]
-  },
-  "features": {
-    "default": true,
-    "score": true,
-    "reactRoles": true,
-    "devUtils": true,
-    "music": true,
-    "admin": true,
-    "debug": false
-  }
+    "private": {
+        "botKey": "YOUR BOT KEY HERE",
+        "ownerId": "YOUR DISCORD ID HERE"
+    },
+    "setup": {
+        "guildId": "YOUR GUILD ID HERE"
+    },
+    "bot": {
+        "blacklistedUsers": [""]
+    },
+    "features": {
+        "default": true,
+        "score": true,
+        "reactRoles": true,
+        "devUtils": true,
+        "music": true,
+        "admin": true,
+        "debug": false,
+        "gamingCommunity": true
+    }
 }
