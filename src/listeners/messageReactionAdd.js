@@ -20,7 +20,12 @@ class MessageReactionAddListener extends Listener {
         if (user.bot) {
             return;
         }
-        const reactionRole = getReactionRole.get(msgReact.message.id, msgReact.emoji.name);
+
+        const emoji = msgReact.message.guild.emojis.find(e => e.id === msgReact.emoji.id);
+        const reactionRole = getReactionRole.get(
+            msgReact.message.id,
+            emoji ? `<:${emoji.name}:${emoji.id}>` : msgReact.emoji.name
+        );
         if (!reactionRole) {
             log(ResourceStrings.error_react_msg_or_emoji);
             logObj(ResourceStrings.emoji_not_found_is, msgReact.emoji);
@@ -31,7 +36,7 @@ class MessageReactionAddListener extends Listener {
             .then(mem => mem.addRole(reactionRole.role_id))
             .catch(e => {
                 msgReact.message.channel.send(ResourceStrings.error_missing_permissions);
-                logObj(ResourceStrings.error_failed_to_apply_role, e);
+                //logObj(ResourceStrings.error_failed_to_apply_role, e);
             });
     }
 }

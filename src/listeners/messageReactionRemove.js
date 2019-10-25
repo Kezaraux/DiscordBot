@@ -2,6 +2,7 @@ import { Listener } from "discord-akairo";
 
 import log from "../utils/logger";
 import { getReactionRole } from "../utils/database";
+import ResourceStrings from "../utils/ResourceStrings.json";
 
 const event = "messageReactionRemove";
 class MessageReactionRemoveListener extends Listener {
@@ -15,7 +16,11 @@ class MessageReactionRemoveListener extends Listener {
     }
 
     exec(msgReact, user) {
-        const reactionRole = getReactionRole.get(msgReact.message.id, msgReact.emoji.name);
+        const emoji = msgReact.message.guild.emojis.find(e => e.id === msgReact.emoji.id);
+        const reactionRole = getReactionRole.get(
+            msgReact.message.id,
+            emoji ? `<:${emoji.name}:${emoji.id}>` : msgReact.emoji.name
+        );
         if (!reactionRole) {
             log(ResourceStrings.error_react_msg_or_emoji + ResourceStrings.warn_bot_removing_reactions);
             return;

@@ -66,7 +66,13 @@ class AddReactionRoleCommand extends Command {
             role_id: role.id
         };
 
-        reactMsg.react(args.reaction);
+        const reactionId = args.reaction.split(":")[2]
+            ? args.reaction.split(":")[2].split(">")[0]
+            : undefined;
+        const reaction = reactionId ? message.guild.emojis.find(e => e.id === reactionId) : args.reaction;
+        console.log({ reaction });
+
+        reactMsg.react(reaction);
         addReactionRole.run(data);
         return message.channel.send(sprintf(ResourceStrings.reaction_set_for_role, args.reaction, role.name));
     }

@@ -57,9 +57,8 @@ class RemoveReactionRoleCommand extends Command {
 
         // Remove all reactions from the message
         // Remove the role from all users
-        const reactionOnMessage = reactMsg.reactions.find(
-            r => r.emoji.name === reactRole.reaction_identifier
-        );
+        const cond = args.reaction.split(":")[2] ? args.reaction.split(":")[1] : args.reaction;
+        const reactionOnMessage = reactMsg.reactions.find(r => r.emoji.name === cond);
         log(ResourceStrings.warn_removing_reactions);
         reactionOnMessage.users.forEach(async u => {
             reactionOnMessage.remove(u);
