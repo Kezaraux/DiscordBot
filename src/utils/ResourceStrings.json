@@ -3,6 +3,7 @@
     "error_item_not_found": "Could not find the specified %s.",
     "error_item_not_found_deleted": "Could not find the specified %s, was it deleted?",
     "error_item_not_found_params": "Could not find the specified %s, did you give the correct information?",
+    "error_item_not_found_config": "Could not find the specified %s, either create the %s or update the config accordingly.",
     "error_item_not_valid": "Please provide a proper %s!",
     "error_role_deleted": "Role associated with %s appears to have been deleted.",
     "error_reaction_not_found": "Reaction could not be found on message, were they all removed.",
@@ -76,5 +77,5 @@
     "provide_new_prefix": "Please provide a new prefix to change to!",
     "updated_prefix": "Updated the prefix for guild %s to %s",
     "changed_prefix": "Changed the prefix for this server to %s",
-    "member_role_added": "I've added the member role %s to %s, welcome!"
+    "member_role_added": "I've added the role %s to %s, welcome!"
 }

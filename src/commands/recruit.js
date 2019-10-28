@@ -48,9 +48,29 @@ class PingCommand extends Command {
             .catch(log(ResourceStrings.error_missing_permissions))
             .finally(() => {
                 if (guildMember.roles.find(r => r.name === guildConfig.memberRole)) {
-                    message.channel.send(
-                        sprintf(ResourceStrings.member_role_added, memberRole.name, guildMember.displayName)
+                    const channel = message.guild.channels.find(
+                        c => c.name === guildConfig.newRecruitChannel
                     );
+                    if (!channel) {
+                        message.channel.send(
+                            sprintf(ResourceStrings.error_item_not_found_config, "channel", "channel")
+                        );
+                        message.channel.send(
+                            sprintf(
+                                ResourceStrings.member_role_added,
+                                memberRole.name,
+                                guildMember.displayName
+                            )
+                        );
+                    } else {
+                        channel.send(
+                            sprintf(
+                                ResourceStrings.member_role_added,
+                                memberRole.name,
+                                guildMember.displayName
+                            )
+                        );
+                    }
                 } else {
                     message.channel.send(ResourceStrings.error_missing_permissions);
                 }
